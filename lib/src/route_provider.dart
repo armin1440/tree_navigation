@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:tree_navigation/navigation/route_info.dart';
+import 'package:tree_navigation/src/route_info.dart';
 
 class RouteProvider extends InheritedNotifier<RouteInfoNotifier> {
   const RouteProvider._({
