@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:navigation_package/navigation/navigation_int.dart';
 import 'package:navigation_package/navigation/route_info.dart';
 

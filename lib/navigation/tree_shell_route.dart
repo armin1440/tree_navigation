@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:navigation_package/navigation/route_info.dart';
-import 'package:navigation_package/navigation/route_tree.dart';
 
 import 'my_navigation_observer.dart';
 

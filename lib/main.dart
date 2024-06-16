@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:navigation_package/navigation/route_provider.dart';
 
 import 'initialize.dart';
 import 'navigation/my_custom_transition_page.dart';
@@ -12,7 +13,7 @@ final navigationKey = GlobalKey<NavigatorState>(debugLabel: 'navigationKey');
 
 void main() async {
   await init();
-  runApp(const MyApp());
+  runApp(RouteProvider(child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

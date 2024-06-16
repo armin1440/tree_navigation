@@ -2,6 +2,7 @@ name: navigation_package
 description: "Navigation package for abomis coding structure"
 
 version: 1.0.0+1
+homepage: https://github.com/armin1440/tree_navigation
 
 environment:
   sdk: '>=3.4.1 <4.0.0'
