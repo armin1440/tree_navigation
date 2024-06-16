@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:navigation_package/main.dart';
+import 'package:tree_navigation/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'navigation/navigation_int.dart';

@@ -1,4 +1,4 @@
-package com.abomis.navigation_package
+package com.abomis.tree_navigation
 
 import io.flutter.embedding.android.FlutterActivity
 

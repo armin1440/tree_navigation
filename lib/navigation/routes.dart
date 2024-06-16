@@ -1,4 +1,4 @@
-import 'package:navigation_package/navigation/route_info.dart';
+import 'package:tree_navigation/navigation/route_info.dart';
 
 abstract class Routes{
   static const RouteInfo home = RouteInfo(

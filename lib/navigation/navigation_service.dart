@@ -1,7 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:navigation_package/navigation/route_info.dart';
+import 'package:tree_navigation/navigation/route_info.dart';
 
 import 'navigation_int.dart';
 

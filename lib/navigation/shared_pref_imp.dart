@@ -1,4 +1,4 @@
-import 'package:navigation_package/navigation/shared_preferences_int.dart';
+import 'package:tree_navigation/navigation/shared_preferences_int.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesImplementation implements SharedPreferencesInterface {

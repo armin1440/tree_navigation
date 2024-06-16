@@ -1,6 +1,6 @@
 {
-    "name": "navigation_package",
-    "short_name": "navigation_package",
+    "name": "tree_navigation",
+    "short_name": "tree_navigation",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

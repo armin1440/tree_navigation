@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
-import 'package:navigation_package/navigation/shared_preferences_int.dart';
+import 'package:tree_navigation/navigation/shared_preferences_int.dart';
 
 import 'navigation_int.dart';
 
