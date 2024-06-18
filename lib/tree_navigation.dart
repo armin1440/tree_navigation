@@ -2,7 +2,6 @@ library tree_navigation;
 
 export 'src/tree_route.dart';
 export 'src/tree_shell_route.dart';
-export 'src/shared_preferences_int.dart';
 export 'src/route_tree.dart';
 export 'src/route_provider.dart';
 export 'src/route_info.dart';

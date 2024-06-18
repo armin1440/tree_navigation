@@ -14,7 +14,7 @@ abstract class NavigationInterface {
   List<String> openedDialogOrBottomSheetList = [];
   List<String> openedDialogList = [];
   List<String> openedBottomSheetList = [];
-  Map<RouteInfo, ControllerInterface> registeredControllers = {};
+  Map<RouteInfo, TreeControllerInterface> registeredControllers = {};
   List<RouteInfo> stack = [];
   Function? pendingRouteFunction;
   RouteInfo? previousRoute;
@@ -25,7 +25,7 @@ abstract class NavigationInterface {
     RouteProvider.updateRoute(context: context, routeName: newRoute);
   }
 
-  void registerAllControllers(Map<RouteInfo, ControllerInterface> routeToController) {
+  void registerAllControllers(Map<RouteInfo, TreeControllerInterface> routeToController) {
     registeredControllers = routeToController;
   }
 
