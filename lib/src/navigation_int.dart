@@ -14,7 +14,7 @@ abstract class NavigationInterface {
   List<String> openedDialogOrBottomSheetList = [];
   List<String> openedDialogList = [];
   List<String> openedBottomSheetList = [];
-  Map<RouteInfo, TreeControllerInterface> registeredControllers = {};
+  Map<RouteInfo, ControllerInterface> registeredControllers = {};
   List<RouteInfo> stack = [];
   Function? pendingRouteFunction;
   RouteInfo? previousRoute;
@@ -25,7 +25,7 @@ abstract class NavigationInterface {
     RouteProvider.updateRoute(context: context, routeName: newRoute);
   }
 
-  void registerAllControllers(Map<RouteInfo, TreeControllerInterface> routeToController) {
+  void registerAllControllers(Map<RouteInfo, ControllerInterface> routeToController) {
     registeredControllers = routeToController;
   }
 
@@ -234,6 +234,7 @@ abstract class NavigationInterface {
     bool canSizeOverlay = false,
     bool maintainState = false,
     bool opaque = false,
+    BuildContext? passedContext,
   }) {
     OverlayEntry overlayEntry = OverlayEntry(
       canSizeOverlay: canSizeOverlay,
@@ -260,7 +261,7 @@ abstract class NavigationInterface {
       },
     );
 
-    Overlay.of(context, debugRequiredFor: child).insert(overlayEntry);
+    Overlay.of(passedContext ?? context, debugRequiredFor: child).insert(overlayEntry);
     return overlayEntry;
   }
 }

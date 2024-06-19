@@ -14,7 +14,7 @@ typedef ExceptionHandler = void Function(
   GoRouter router,
 );
 
-typedef RouteTreePageBuilder = MyCustomTransitionPage Function(
+typedef RouteTreePageBuilder = Page Function(
   BuildContext context,
   GoRouterState state,
 );

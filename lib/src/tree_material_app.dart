@@ -6,8 +6,36 @@ import 'package:go_router/go_router.dart';
 
 import '../tree_navigation.dart';
 import 'my_navigation_observer.dart';
+import 'package:get_it/get_it.dart';
+
+typedef RouteTreeDefaultPageBuilder = Page Function(
+    BuildContext context,
+    GoRouterState state,
+    Widget widget,
+    );
+typedef RouteTreeDefaultShellPageBuilder = Page Function(
+    BuildContext context,
+    GoRouterState state,
+    Widget widget,
+    Widget childWidget,
+    );
 
 abstract class TreeNavigation {
+
+  ///The keys specified in navigatorKeyList has to be in order.
+  ///The first key has to be the top most key. Other ones has to be lower level keys and they also has to be in order.
+  ///example:
+  ///if the route tree looks like this:
+  ///
+  /// navigatorKey = topKey,
+  ///routes = [
+  ///   TreeShellRoute(
+  ///     key: shellKey,
+  ///    routes: [...],
+  ///   )
+  /// ],
+  ///
+  ///Then the navigatorKeyList should be: [topKey, shellKey]
   static MaterialApp makeMaterialApp({
     //These are used in MaterialApp.router
     Key? key,
@@ -57,10 +85,21 @@ abstract class TreeNavigation {
     Object? initialExtra,
     List<NavigatorObserver>? observers,
     bool debugLogDiagnostics = false,
-    GlobalKey<NavigatorState>? navigatorKey,
+    required GlobalKey<NavigatorState> navigatorKey,
+    required List<GlobalKey<NavigatorState>> globalKeyList,
     String? routerRestorationScopeId,
     bool requestFocus = true,
+    RouteTreeDefaultPageBuilder? defaultPageBuilder,
+    RouteTreeDefaultShellPageBuilder? defaultShellPageBuilder,
   }) {
+    if (defaultPageBuilder != null || defaultShellPageBuilder != null) {
+      _addDefaultPageBuilderToRoutes(
+        routes: routes,
+        pageBuilder: defaultPageBuilder,
+        shellPageBuilder: defaultShellPageBuilder,
+      );
+    }
+
     RouterConfig<Object> routerConfig = RouteTree(
       routeInfoList: routeInfoList,
       routes: routes,
@@ -81,6 +120,12 @@ abstract class TreeNavigation {
       restorationScopeId: routerRestorationScopeId,
       requestFocus: requestFocus,
     );
+
+    NavigationInterface navigationInterface = NavigationService(
+      routeInfoList: routeInfoList,
+      globalKeyList: globalKeyList,
+    );
+    GetIt.instance.registerSingleton(navigationInterface);
 
     return MaterialApp.router(
       key: key,
@@ -117,5 +162,29 @@ abstract class TreeNavigation {
       scrollBehavior: scrollBehavior,
       themeAnimationStyle: themeAnimationStyle,
     );
+  }
+
+  static _addDefaultPageBuilderToRoutes({
+    required List<RouteBase> routes,
+    required RouteTreeDefaultPageBuilder? pageBuilder,
+    required RouteTreeDefaultShellPageBuilder? shellPageBuilder,
+  }) {
+    for (RouteBase route in routes) {
+      if (route is TreeRoute && pageBuilder != null) {
+        TreeRoute treeRoute = route;
+        route = treeRoute.withPageBuilder((_, __) => pageBuilder(_, __, treeRoute.pageWidget!));
+      }
+      else if (route is TreeShellRoute && shellPageBuilder != null) {
+        TreeShellRoute treeShellRoute = route;
+        route = treeShellRoute.withPageBuilder((_, __, child) => shellPageBuilder(_, __, treeShellRoute.pageWidget!(child), child));
+      }
+      if (route.routes.isNotEmpty) {
+        _addDefaultPageBuilderToRoutes(routes: route.routes, pageBuilder: pageBuilder, shellPageBuilder: shellPageBuilder,);
+      }
+    }
+  }
+
+  static NavigationInterface get navigator{
+    return GetIt.instance<NavigationInterface>();
   }
 }

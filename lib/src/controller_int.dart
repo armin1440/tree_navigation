@@ -1,13 +1,18 @@
 import 'dart:developer';
-import 'package:get_it/get_it.dart';
 
+import 'package:get_it/get_it.dart';
 import 'navigation_int.dart';
 
-abstract class TreeControllerInterface {
+abstract class ControllerInterface {
   late NavigationInterface navigation;
+  bool initialized = false;
 
-  TreeControllerInterface() {
+  ControllerInterface() {
     navigation = GetIt.instance<NavigationInterface>();
+    
+    if (!initialized) {
+      onCreate();
+    }
   }
 
   void onInit() {

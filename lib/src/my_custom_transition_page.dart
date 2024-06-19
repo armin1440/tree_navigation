@@ -13,7 +13,7 @@ class MyCustomTransitionPage<T> extends CustomTransitionPage<T> {
     super.barrierDismissible = false,
     super.barrierColor,
     super.barrierLabel,
-    super.key,
+    required super.key,
     super.name,
     super.arguments,
     super.restorationId,
