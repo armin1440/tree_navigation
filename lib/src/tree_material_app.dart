@@ -21,14 +21,14 @@ typedef RouteTreeDefaultShellPageBuilder = Page<dynamic> Function(
 );
 
 abstract class TreeNavigation {
-  static late RouteTreeDefaultPageBuilder defaultPageBuilder;
-  static late RouteTreeDefaultShellPageBuilder defaultShellPageBuilder;
+  static RouteTreeDefaultPageBuilder? defaultPageBuilder;
+  static RouteTreeDefaultShellPageBuilder? defaultShellPageBuilder;
 
   static void init({
     required List<RouteInfo> routeInfoList,
     required List<GlobalKey<NavigatorState>> globalKeyList,
-    required RouteTreeDefaultPageBuilder routeTreeDefaultPageBuilder,
-    required RouteTreeDefaultShellPageBuilder routeTreeDefaultShellPageBuilder,
+    RouteTreeDefaultPageBuilder? routeTreeDefaultPageBuilder,
+    RouteTreeDefaultShellPageBuilder? routeTreeDefaultShellPageBuilder,
   }){
     TreeNavigation.defaultPageBuilder = routeTreeDefaultPageBuilder;
     TreeNavigation.defaultShellPageBuilder = routeTreeDefaultShellPageBuilder;

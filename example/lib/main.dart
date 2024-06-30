@@ -8,11 +8,18 @@ void main() async {
   runApp(RouteProvider(child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  initState(){
+    super.initState();
     TreeNavigation.init(
       globalKeyList: [topKey, shellKey],
       routeInfoList: Routes.allRoutes,
@@ -42,7 +49,10 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return TreeNavigation.makeMaterialApp(
       navigatorKey: topKey,
       globalKeyList: [topKey, shellKey],
@@ -117,7 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     }
-
 
     return Scaffold(
       appBar: AppBar(

@@ -1,153 +1,180 @@
 # Tree Navigation
-A package for navigation based on the GoRouter. This package depends on flutter_riverpod, bot_toast, go_router, get_it and shared_perferences packages.
 
+A package for navigation based on the GoRouter.
 
 ## Initialization
-Before running runApp command you need to initialize navigation and shared preferences. In order to do so, just run init method before runApp. Also Wrap MyApp into RouteProvider.
-```
-final navigationKey = GlobalKey<NavigatorState>(debugLabel: 'navigationKey');
 
+Wrap MyApp into RouteProvider.
+
+```
 void main() async {
   await init();
   runApp(RouteProvider(child: const MyApp()));
 }
-
-init() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await _initPackages();
-}
-
-_initPackages() async {
-  await _initSharedPreferences();
-  _initNavigation();
-}
-
-_initSharedPreferences() async {
-  SharedPreferences sp = await SharedPreferences.getInstance();
-  SharedPreferencesInterface sharedPreferencesInterface = SharedPreferencesImplementation(sp);
-  GetIt.instance.registerSingleton(sharedPreferencesInterface);
-}
-
-_initNavigation() {
-  NavigationInterface navigationInterface = NavigationService(
-    routeInfoList: Routes.allRoutes,
-    globalKeyList: [navigationKey],
-  );
-  GetIt.instance.registerSingleton(navigationInterface);
-}
-
-abstract class Routes{
-  static const RouteInfo home = RouteInfo(
-    path: '/',
-    name: 'home',
-    isShellRoute: false,
-  );
-
-  static const List<RouteInfo> allRoutes = [home];
-}
 ```
 
-Then create and pass a RouteTree object to MaterialApp.router. Also pass BotToastInit() to MaterialApp.router:
+Inside MyApp widget initialize tree navigation. routeTreeDefaultPageBuilder and
+routeTreeDefaultShellPageBuilder are optional for init method. If you do not pass them then you must
+pass builder or pageBuilder for every TreeRoute or TreeShellRoute.
+Note that globalKeys should be sorted in order of level. The top most keys come earlier in the list.  
+
 ```
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  GlobalKey<NavigatorState> topKey = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> shellKey = GlobalKey<NavigatorState>();
+  
+  abstract class Routes {
+    static const RouteInfo home = RouteInfo(
+      path: '/',
+      name: 'home',
+      isShellRoute: false,
+    );
+    static const RouteInfo newPage = RouteInfo(
+      path: '/newPage',
+      name: 'newPage',
+      isShellRoute: false,
+    );
+    
+    static const List<RouteInfo> allRoutes = [home, newPage];
+  }
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late final RouteTree routeTree;
-
-  @override
-  void initState() {
+  initState(){
     super.initState();
-    routeTree = RouteTree(
-      navigatorKey: navigationKey,
-      debugLogDiagnostics: true,
-      initialLocation: '/',
+    TreeNavigation.init(
+      globalKeyList: [topKey, shellKey],
+      routeInfoList: Routes.allRoutes,
+      routeTreeDefaultPageBuilder: (_, state, child) => MyCustomTransitionPage(
+        key: state.pageKey,
+        child: child,
+        transitionsBuilder: (_, animation, ___, widget) {
+          return FadeTransition(
+            opacity: animation,
+            child: widget,
+          );
+        },
+      ),
+      routeTreeDefaultShellPageBuilder: (_, state, parent, child) => MyCustomTransitionPage(
+        key: state.pageKey,
+        child: parent(child),
+        transitionsBuilder: (_, animation, ___, widget) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          final tween = Tween(begin: begin, end: end);
+          final offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: widget,
+          );
+        },
+      ),
+    );
+  }
+```
+
+In build method of MyApp widget do as following:
+```
+    @override
+  Widget build(BuildContext context) {
+    return TreeNavigation.makeMaterialApp(
+      navigatorKey: topKey,
+      globalKeyList: [topKey, shellKey],
       routeInfoList: Routes.allRoutes,
       routes: [
         TreeRoute(
-          parentNavigatorKey: navigationKey,
-          name: Routes.home.name,
-          path: Routes.home.path,
-          pageBuilder: (BuildContext context, GoRouterState state) {
-            return MyCustomTransitionPage(
-              key: state.pageKey,
-              name: Routes.home.name,
-              child: const MyHomePage(title: 'My Navigation Home'),
-              transitionsBuilder: (context, animation1, animation2, child) => FadeTransition(
-                opacity: animation1,
-                child: child,
+          routeInfo: Routes.home,
+          pageWidget: const MyHomePage(
+            title: 'Home',
+            color: Colors.white,
+          ),
+        ),
+        TreeShellRoute(
+          navigatorKey: shellKey,
+          pageWidget: (child) => MyHomePage(title: 'Shell Route', color: Colors.blue, child: child,),
+          routes: [
+            TreeRoute(
+              routeInfo: Routes.newPage,
+              pageWidget: const MyHomePage(
+                title: 'Sub Shell',
+                color: Colors.pink,
               ),
-            );
-          },
+            ),
+          ],
         ),
       ],
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: routeTree,
-      builder: BotToastInit(),
-    );
-  }
-}
 ```
-You can have TreeRoute or TreeShellRoute. They are as same as GoRoute and ShellRoute.
-
 
 ## Usage
+
 You can access current route by:
 RouteProvider.of(context)?.name;
 
 Navigate to a screen by:
+
 ```
 final navigation = GetIt.instance<NavigationInterface>();
 navigation.goNamed(Routes.home);
 ```
+
 Open a dialog by:
+
 ```
 await navigation.openDialog<String>(dialog: const MyDialog());
 ```
+
 Open a bottomSheet by:
+
 ```
 await navigation.openBottomSheet<String>(bottomSheet: const MyBottomSheet());
 ```
+
 Show a text toast by (You can use this instead of snackbar):
+
 ```
 navigation.showTextToast(text: 'this is a toast');
 ```
+
 Pop a dialog, bottomsheet or a screen by:
+
 ```
 navigation.pop();
 ```
+
 Pop all dialogs by:
+
 ```
 navigation.popAllDialogs();
 ```
+
 Pop all bottomsheets by:
+
 ```
 navigation.popAllBottomSheets();
 ```
+
 Pop all dialogs and bottomsheets by:
+
 ```
 navigation.popAllPopUps();
 ```
+
 Pop until a condition is satisfied:
+
 ```
 navigation.popUntilRoute(verifyCondition: (currentRoute) {
       return currentRoute == Routes.home;
     });
 ```
+
 Pop until reaching a pop up:
+
 ```
 navigation.popUntilPopUp(verifyCondition: (currentPopUpName) => popUpName == currentPopUpName);
 ```
+
 Show an overlay widget:
+
 ```
 final handler = navigation.showOverlay(
       child: Container(
@@ -157,24 +184,34 @@ final handler = navigation.showOverlay(
       alignment: Alignment.topLeft,
     );
 ```
+
 Dispose an overlay widget:
+
 ```
 handler.remove();
 handler.dispose();
 ```
+
 Get context by:
+
 ```
 navigation.context;
 ```
+
 Check if there is any open dialog by:
+
 ```
 navigation.isDialogOpen();
 ```
+
 Check if there is any open bottomsheets by:
+
 ```
 navigation.isBottomSheetOpen();
 ```
+
 Check if there is any open dialog or bottomsheets by:
+
 ```
 navigation.isDialogOrBottomSheetOpen();
 ```
