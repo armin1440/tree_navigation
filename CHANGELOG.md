@@ -1,3 +1,8 @@
+## [1.0.3+10300] - 30.06.2024
+
+* Made page builders optional
+* Updated ReadMe.MD
+
 ## [1.0.2+10200] - 30.06.2024
 
 * Added default page builder and default shell page builder
