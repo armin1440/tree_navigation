@@ -12,13 +12,13 @@ typedef RouteTreeDefaultPageBuilder = Page<dynamic> Function(
     BuildContext context,
     GoRouterState state,
     Widget widget,
-    );
+);
 typedef RouteTreeDefaultShellPageBuilder = Page<dynamic> Function(
     BuildContext context,
     GoRouterState state,
     Widget Function(Widget) parent,
     Widget childWidget,
-    );
+);
 
 abstract class TreeNavigation {
   static late RouteTreeDefaultPageBuilder defaultPageBuilder;
