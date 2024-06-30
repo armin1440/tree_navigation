@@ -8,19 +8,38 @@ import '../tree_navigation.dart';
 import 'my_navigation_observer.dart';
 import 'package:get_it/get_it.dart';
 
-typedef RouteTreeDefaultPageBuilder = Page Function(
+typedef RouteTreeDefaultPageBuilder = Page<dynamic> Function(
     BuildContext context,
     GoRouterState state,
     Widget widget,
     );
-typedef RouteTreeDefaultShellPageBuilder = Page Function(
+typedef RouteTreeDefaultShellPageBuilder = Page<dynamic> Function(
     BuildContext context,
     GoRouterState state,
-    Widget widget,
+    Widget Function(Widget) parent,
     Widget childWidget,
     );
 
 abstract class TreeNavigation {
+  static late RouteTreeDefaultPageBuilder defaultPageBuilder;
+  static late RouteTreeDefaultShellPageBuilder defaultShellPageBuilder;
+
+  static void init({
+    required List<RouteInfo> routeInfoList,
+    required List<GlobalKey<NavigatorState>> globalKeyList,
+    required RouteTreeDefaultPageBuilder routeTreeDefaultPageBuilder,
+    required RouteTreeDefaultShellPageBuilder routeTreeDefaultShellPageBuilder,
+  }){
+    TreeNavigation.defaultPageBuilder = routeTreeDefaultPageBuilder;
+    TreeNavigation.defaultShellPageBuilder = routeTreeDefaultShellPageBuilder;
+
+    NavigationInterface navigationInterface = NavigationService(
+      routeInfoList: routeInfoList,
+      globalKeyList: globalKeyList,
+    );
+    GetIt.instance.skipDoubleRegistration = true;
+    GetIt.instance.registerSingleton<NavigationInterface>(navigationInterface);
+  }
 
   ///The keys specified in navigatorKeyList has to be in order.
   ///The first key has to be the top most key. Other ones has to be lower level keys and they also has to be in order.
@@ -89,16 +108,17 @@ abstract class TreeNavigation {
     required List<GlobalKey<NavigatorState>> globalKeyList,
     String? routerRestorationScopeId,
     bool requestFocus = true,
-    RouteTreeDefaultPageBuilder? defaultPageBuilder,
-    RouteTreeDefaultShellPageBuilder? defaultShellPageBuilder,
+    // RouteTreeDefaultPageBuilder? defaultPageBuilder,
+    // RouteTreeDefaultShellPageBuilder? defaultShellPageBuilder,
   }) {
-    if (defaultPageBuilder != null || defaultShellPageBuilder != null) {
-      _addDefaultPageBuilderToRoutes(
-        routes: routes,
-        pageBuilder: defaultPageBuilder,
-        shellPageBuilder: defaultShellPageBuilder,
-      );
-    }
+    // if (defaultPageBuilder != null || defaultShellPageBuilder != null) {
+    //   _addDefaultPageBuilderToRoutes(
+    //     routes: routes,
+    //     pageBuilder: _routeTreeDefaultPageBuilder,
+    //     shellPageBuilder: _routeTreeDefaultShellPageBuilder,
+    //   );
+    // }
+
 
     RouterConfig<Object> routerConfig = RouteTree(
       routeInfoList: routeInfoList,
@@ -120,12 +140,6 @@ abstract class TreeNavigation {
       restorationScopeId: routerRestorationScopeId,
       requestFocus: requestFocus,
     );
-
-    NavigationInterface navigationInterface = NavigationService(
-      routeInfoList: routeInfoList,
-      globalKeyList: globalKeyList,
-    );
-    GetIt.instance.registerSingleton(navigationInterface);
 
     return MaterialApp.router(
       key: key,
@@ -164,27 +178,29 @@ abstract class TreeNavigation {
     );
   }
 
-  static _addDefaultPageBuilderToRoutes({
-    required List<RouteBase> routes,
-    required RouteTreeDefaultPageBuilder? pageBuilder,
-    required RouteTreeDefaultShellPageBuilder? shellPageBuilder,
-  }) {
-    for (RouteBase route in routes) {
-      if (route is TreeRoute && pageBuilder != null) {
-        TreeRoute treeRoute = route;
-        route = treeRoute.withPageBuilder((_, __) => pageBuilder(_, __, treeRoute.pageWidget!));
-      }
-      else if (route is TreeShellRoute && shellPageBuilder != null) {
-        TreeShellRoute treeShellRoute = route;
-        route = treeShellRoute.withPageBuilder((_, __, child) => shellPageBuilder(_, __, treeShellRoute.pageWidget!(child), child));
-      }
-      if (route.routes.isNotEmpty) {
-        _addDefaultPageBuilderToRoutes(routes: route.routes, pageBuilder: pageBuilder, shellPageBuilder: shellPageBuilder,);
-      }
-    }
-  }
+  // static _addDefaultPageBuilderToRoutes({
+  //   required List<RouteBase> routes,
+  //   required RouteTreeDefaultPageBuilder? pageBuilder,
+  //   required RouteTreeDefaultShellPageBuilder? shellPageBuilder,
+  // }) {
+  //   for (RouteBase route in routes) {
+  //     if (route is TreeRoute && pageBuilder != null) {
+  //       TreeRoute treeRoute = route;
+  //       route = treeRoute.withPageBuilder((_, __) => pageBuilder(_, __, treeRoute.pageWidget!));
+  //     }
+  //     else if (route is TreeShellRoute && shellPageBuilder != null) {
+  //       TreeShellRoute treeShellRoute = route;
+  //       route = treeShellRoute.withPageBuilder((_, __, child) =>
+  //           shellPageBuilder(_, __, treeShellRoute.pageWidget!(child), child));
+  //     }
+  //     if (route.routes.isNotEmpty) {
+  //       _addDefaultPageBuilderToRoutes(
+  //         routes: route.routes, pageBuilder: pageBuilder, shellPageBuilder: shellPageBuilder,);
+  //     }
+  //   }
+  // }
 
-  static NavigationInterface get navigator{
+  static NavigationInterface get navigator {
     return GetIt.instance<NavigationInterface>();
   }
 }

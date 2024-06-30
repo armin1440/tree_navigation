@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TreeNavigation.makeMaterialApp(
-      navigatorKey: topKey,
+    TreeNavigation.init(
       globalKeyList: [topKey, shellKey],
-      defaultPageBuilder: (_, state, child) => MyCustomTransitionPage(
+      routeInfoList: Routes.allRoutes,
+      routeTreeDefaultPageBuilder: (_, state, child) => MyCustomTransitionPage(
         key: state.pageKey,
         child: child,
         transitionsBuilder: (_, animation, ___, widget) {
@@ -26,9 +26,9 @@ class MyApp extends StatelessWidget {
           );
         },
       ),
-      defaultShellPageBuilder: (_, state, parent, child) => MyCustomTransitionPage(
+      routeTreeDefaultShellPageBuilder: (_, state, parent, child) => MyCustomTransitionPage(
         key: state.pageKey,
-        child: child,
+        child: parent(child),
         transitionsBuilder: (_, animation, ___, widget) {
           const begin = Offset(0.0, 1.0);
           const end = Offset.zero;
@@ -41,19 +41,31 @@ class MyApp extends StatelessWidget {
           );
         },
       ),
+    );
+
+    return TreeNavigation.makeMaterialApp(
+      navigatorKey: topKey,
+      globalKeyList: [topKey, shellKey],
       routeInfoList: Routes.allRoutes,
       routes: [
         TreeRoute(
           routeInfo: Routes.home,
           pageWidget: const MyHomePage(
             title: 'Home',
+            color: Colors.white,
           ),
         ),
         TreeShellRoute(
           navigatorKey: shellKey,
-          pageWidget: (child) => MyHomePage(title: 'Shell Route', child: child),
+          pageWidget: (child) => MyHomePage(title: 'Shell Route', color: Colors.blue, child: child,),
           routes: [
-            TreeRoute(routeInfo: Routes.newPage),
+            TreeRoute(
+              routeInfo: Routes.newPage,
+              pageWidget: const MyHomePage(
+                title: 'Sub Shell',
+                color: Colors.pink,
+              ),
+            ),
           ],
         ),
       ],
@@ -77,10 +89,11 @@ abstract class Routes {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, this.child});
+  const MyHomePage({super.key, required this.title, this.child, required this.color});
 
   final String title;
   final Widget? child;
+  final Color color;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -93,15 +106,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    if(widget.title == 'Sub Shell') {
+      return Container(
+        color: widget.color,
+        padding: const EdgeInsets.all(100),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[if (widget.child != null) widget.child! else Text(widget.title)],
+        ),
+      );
+    }
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
+      backgroundColor: widget.color,
+      body: Padding(
+        padding: const EdgeInsets.all(100),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[if (widget.child != null) widget.child! else const Text("You are using tree navigation")],
+          children: <Widget>[if (widget.child != null) widget.child! else Text(widget.title)],
         ),
       ),
       floatingActionButton: FloatingActionButton(

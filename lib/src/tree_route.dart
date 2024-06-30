@@ -4,24 +4,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tree_navigation/src/route_tree.dart';
 import './route_info.dart';
+import './tree_material_app.dart';
 
 typedef TreeRouteExitCallback = FutureOr<bool> Function(BuildContext context, GoRouterState state);
 
 class TreeRoute extends GoRoute {
   ///This is used by defaultPageBuilder that might be set in RouteTree
-  Widget? pageWidget;
+  final Widget? pageWidget;
   final RouteInfo routeInfo;
 
   TreeRoute({
     required this.routeInfo,
     super.builder,
-    RouteTreePageBuilder? super.pageBuilder,
+    RouteTreePageBuilder? pageBuilder,
     super.parentNavigatorKey,
     super.redirect,
     super.onExit,
-    super.routes = const <TreeRoute>[],
+    super.routes = const <RouteBase>[],
     this.pageWidget,
-  }) : super(name: routeInfo.name, path: routeInfo.path);
+  }) : super(
+    name: routeInfo.name,
+    path: routeInfo.path,
+    pageBuilder: pageBuilder ?? (context, state) => TreeNavigation.defaultPageBuilder(context, state, pageWidget!),
+  );
 
   TreeRoute withPageBuilder(RouteTreePageBuilder? pageBuilder) {
     return TreeRoute(
