@@ -37,7 +37,6 @@ abstract class TreeNavigation {
       routeInfoList: routeInfoList,
       globalKeyList: globalKeyList,
     );
-    GetIt.instance.skipDoubleRegistration = true;
     GetIt.instance.registerSingleton<NavigationInterface>(navigationInterface);
   }
 
