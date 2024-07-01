@@ -1,3 +1,7 @@
+## [1.0.5] - 01.07.2024
+
+* Made page builders optional
+
 ## [1.0.4] - 01.07.2024
 
 * Fixed using two identical navigation observers
