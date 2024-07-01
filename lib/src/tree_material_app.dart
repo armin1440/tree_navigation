@@ -12,23 +12,23 @@ typedef RouteTreeDefaultPageBuilder = Page<dynamic> Function(
     BuildContext context,
     GoRouterState state,
     Widget widget,
-);
+    );
 typedef RouteTreeDefaultShellPageBuilder = Page<dynamic> Function(
     BuildContext context,
     GoRouterState state,
     Widget Function(Widget) parent,
     Widget childWidget,
-);
+    );
 
 abstract class TreeNavigation {
-  static RouteTreeDefaultPageBuilder? defaultPageBuilder;
-  static RouteTreeDefaultShellPageBuilder? defaultShellPageBuilder;
+  static late RouteTreeDefaultPageBuilder defaultPageBuilder;
+  static late RouteTreeDefaultShellPageBuilder defaultShellPageBuilder;
 
   static void init({
     required List<RouteInfo> routeInfoList,
     required List<GlobalKey<NavigatorState>> globalKeyList,
-    RouteTreeDefaultPageBuilder? routeTreeDefaultPageBuilder,
-    RouteTreeDefaultShellPageBuilder? routeTreeDefaultShellPageBuilder,
+    required RouteTreeDefaultPageBuilder routeTreeDefaultPageBuilder,
+    required RouteTreeDefaultShellPageBuilder routeTreeDefaultShellPageBuilder,
   }){
     TreeNavigation.defaultPageBuilder = routeTreeDefaultPageBuilder;
     TreeNavigation.defaultShellPageBuilder = routeTreeDefaultShellPageBuilder;
@@ -107,18 +107,7 @@ abstract class TreeNavigation {
     required List<GlobalKey<NavigatorState>> globalKeyList,
     String? routerRestorationScopeId,
     bool requestFocus = true,
-    // RouteTreeDefaultPageBuilder? defaultPageBuilder,
-    // RouteTreeDefaultShellPageBuilder? defaultShellPageBuilder,
   }) {
-    // if (defaultPageBuilder != null || defaultShellPageBuilder != null) {
-    //   _addDefaultPageBuilderToRoutes(
-    //     routes: routes,
-    //     pageBuilder: _routeTreeDefaultPageBuilder,
-    //     shellPageBuilder: _routeTreeDefaultShellPageBuilder,
-    //   );
-    // }
-
-
     RouterConfig<Object> routerConfig = RouteTree(
       routeInfoList: routeInfoList,
       routes: routes,
@@ -133,7 +122,7 @@ abstract class TreeNavigation {
       initialLocation: initialLocation,
       overridePlatformDefaultLocation: overridePlatformDefaultLocation,
       initialExtra: initialExtra,
-      observers: [MyNavigationObserver(routeInfoList), ...(observers ?? [])],
+      observers: observers ?? [],
       debugLogDiagnostics: debugLogDiagnostics,
       navigatorKey: navigatorKey,
       restorationScopeId: routerRestorationScopeId,
@@ -176,28 +165,6 @@ abstract class TreeNavigation {
       themeAnimationStyle: themeAnimationStyle,
     );
   }
-
-  // static _addDefaultPageBuilderToRoutes({
-  //   required List<RouteBase> routes,
-  //   required RouteTreeDefaultPageBuilder? pageBuilder,
-  //   required RouteTreeDefaultShellPageBuilder? shellPageBuilder,
-  // }) {
-  //   for (RouteBase route in routes) {
-  //     if (route is TreeRoute && pageBuilder != null) {
-  //       TreeRoute treeRoute = route;
-  //       route = treeRoute.withPageBuilder((_, __) => pageBuilder(_, __, treeRoute.pageWidget!));
-  //     }
-  //     else if (route is TreeShellRoute && shellPageBuilder != null) {
-  //       TreeShellRoute treeShellRoute = route;
-  //       route = treeShellRoute.withPageBuilder((_, __, child) =>
-  //           shellPageBuilder(_, __, treeShellRoute.pageWidget!(child), child));
-  //     }
-  //     if (route.routes.isNotEmpty) {
-  //       _addDefaultPageBuilderToRoutes(
-  //         routes: route.routes, pageBuilder: pageBuilder, shellPageBuilder: shellPageBuilder,);
-  //     }
-  //   }
-  // }
 
   static NavigationInterface get navigator {
     return GetIt.instance<NavigationInterface>();

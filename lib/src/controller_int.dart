@@ -12,6 +12,7 @@ abstract class ControllerInterface {
     
     if (!initialized) {
       onCreate();
+      initialized = true;
     }
   }
 
