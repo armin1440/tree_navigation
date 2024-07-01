@@ -58,7 +58,7 @@ class TreeShellRoute extends ShellRoute {
     this.pageWidget,
   }) : super(
     observers: [MyNavigationObserver(routeInfoList), ...(observers ?? [])],
-    pageBuilder: pageBuilder != null ? (context, state, widget) => pageBuilder(context, state, widget) : (context, state, widget) => TreeNavigation.defaultShellPageBuilder(context, state, pageWidget!, widget),
+    pageBuilder: pageBuilder != null ? (context, state, widget) => pageBuilder(context, state, widget) : TreeNavigation.defaultShellPageBuilder != null ? (context, state, widget) => TreeNavigation.defaultShellPageBuilder!(context, state, pageWidget!, widget) : null,
   );
 
   factory TreeShellRoute({
