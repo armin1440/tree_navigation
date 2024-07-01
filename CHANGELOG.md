@@ -1,4 +1,4 @@
-## [1.0.3+10300] - 01.07.2024
+## [1.0.4] - 01.07.2024
 
 * Fixed using two identical navigation observers
 

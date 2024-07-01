@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../tree_navigation.dart';
-import 'my_navigation_observer.dart';
 import 'package:get_it/get_it.dart';
 
 typedef RouteTreeDefaultPageBuilder = Page<dynamic> Function(

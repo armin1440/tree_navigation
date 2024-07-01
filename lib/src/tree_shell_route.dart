@@ -43,35 +43,28 @@ typedef StatefulTreeShellRoutePageBuilder = Page<dynamic> Function(
 
 class TreeShellRoute extends ShellRoute {
   ///This is used by defaultShellPageBuilder that might be set in RouteTree
-  Widget Function(Widget)? pageWidget;
-  final List<RouteBase> routes;
+  final Widget Function(Widget)? pageWidget;
 
   TreeShellRoute._({
     required List<RouteInfo> routeInfoList,
-    GoRouterRedirect? redirect,
-    ShellRouteBuilder? builder,
-    RouteTreeDefaultShellPageBuilder? pageBuilder,
+    super.redirect,
+    super.builder,
+    ShellRoutePageBuilder? pageBuilder,
     List<NavigatorObserver>? observers,
-    required this.routes,
-    GlobalKey<NavigatorState>? parentNavigatorKey,
-    GlobalKey<NavigatorState>? navigatorKey,
-    String? restorationScopeId,
+    required super.routes,
+    super.parentNavigatorKey,
+    super.navigatorKey,
+    super.restorationScopeId,
     this.pageWidget,
   }) : super(
     observers: [MyNavigationObserver(routeInfoList), ...(observers ?? [])],
-    redirect: redirect,
-    builder: builder,
-    pageBuilder: pageBuilder != null ? (context, state, widget) => pageBuilder(context, state, pageWidget!, widget) : (context, state, widget) => TreeNavigation.defaultShellPageBuilder(context, state, pageWidget!, widget),
-    routes: routes,
-    parentNavigatorKey: parentNavigatorKey,
-    navigatorKey: navigatorKey,
-    restorationScopeId: restorationScopeId,
+    pageBuilder: pageBuilder != null ? (context, state, widget) => pageBuilder(context, state, widget) : (context, state, widget) => TreeNavigation.defaultShellPageBuilder(context, state, pageWidget!, widget),
   );
 
   factory TreeShellRoute({
     GoRouterRedirect? redirect,
     ShellRouteBuilder? builder,
-    RouteTreeDefaultShellPageBuilder? pageBuilder,
+    ShellRoutePageBuilder? pageBuilder,
     List<NavigatorObserver>? observers,
     required List<RouteBase> routes,
     GlobalKey<NavigatorState>? parentNavigatorKey,
@@ -95,7 +88,7 @@ class TreeShellRoute extends ShellRoute {
     );
   }
   
-  TreeShellRoute withPageBuilder(RouteTreeDefaultShellPageBuilder pageBuilder){
+  TreeShellRoute withPageBuilder(ShellRoutePageBuilder pageBuilder){
     return TreeShellRoute(
         redirect: redirect,
         builder: builder,

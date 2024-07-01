@@ -10,28 +10,22 @@ typedef TreeRouteExitCallback = FutureOr<bool> Function(BuildContext context, Go
 
 class TreeRoute extends GoRoute {
   ///This is used by defaultPageBuilder that might be set in RouteTree
-  Widget? pageWidget;
+  final Widget? pageWidget;
   final RouteInfo routeInfo;
-  final List<RouteBase> routes;
 
   TreeRoute({
     required this.routeInfo,
-    GoRouterWidgetBuilder? builder,
+    super.builder,
     RouteTreePageBuilder? pageBuilder,
-    GlobalKey<NavigatorState>? parentNavigatorKey,
-    GoRouterRedirect? redirect,
-    ExitCallback? onExit,
-    this.routes= const <RouteBase>[],
+    super.parentNavigatorKey,
+    super.redirect,
+    super.onExit,
+    super.routes = const <RouteBase>[],
     this.pageWidget,
   }) : super(
     name: routeInfo.name,
     path: routeInfo.path,
-    builder: builder,
     pageBuilder: pageBuilder ?? (context, state) => TreeNavigation.defaultPageBuilder(context, state, pageWidget!),
-    parentNavigatorKey: parentNavigatorKey,
-    redirect: redirect,
-    onExit: onExit,
-    routes: routes,
   );
 
   TreeRoute withPageBuilder(RouteTreePageBuilder? pageBuilder) {
