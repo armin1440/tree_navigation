@@ -1,3 +1,7 @@
+## [1.0.6] - 07.08.2024
+
+* Possible to put TreeNavigation.makeMaterialApp in the build
+
 ## [1.0.5] - 01.07.2024
 
 * Made page builders optional

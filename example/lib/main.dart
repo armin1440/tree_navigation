@@ -16,9 +16,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
-  initState(){
+  initState() {
     super.initState();
     TreeNavigation.init(
       globalKeyList: [topKey, shellKey],
@@ -67,7 +66,11 @@ class _MyAppState extends State<MyApp> {
         ),
         TreeShellRoute(
           navigatorKey: shellKey,
-          pageWidget: (child) => MyHomePage(title: 'Shell Route', color: Colors.blue, child: child,),
+          pageWidget: (child) => MyHomePage(
+            title: 'Shell Route',
+            color: Colors.blue,
+            child: child,
+          ),
           routes: [
             TreeRoute(
               routeInfo: Routes.newPage,
@@ -116,8 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    if(widget.title == 'Sub Shell') {
+    if (widget.title == 'Sub Shell') {
       return Container(
         color: widget.color,
         padding: const EdgeInsets.all(100),

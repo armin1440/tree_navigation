@@ -22,6 +22,7 @@ typedef RouteTreeDefaultShellPageBuilder = Page<dynamic> Function(
 abstract class TreeNavigation {
   static RouteTreeDefaultPageBuilder? defaultPageBuilder;
   static RouteTreeDefaultShellPageBuilder? defaultShellPageBuilder;
+  static RouterConfig<Object>? routerConfig;
 
   static void init({
     required List<RouteInfo> routeInfoList,
@@ -107,26 +108,26 @@ abstract class TreeNavigation {
     String? routerRestorationScopeId,
     bool requestFocus = true,
   }) {
-    RouterConfig<Object> routerConfig = RouteTree(
-      routeInfoList: routeInfoList,
-      routes: routes,
-      extraCodec: extraCodec,
-      onException: onException,
-      errorPageBuilder: errorPageBuilder,
-      errorBuilder: errorBuilder,
-      redirect: redirect,
-      refreshListenable: refreshListenable,
-      redirectLimit: redirectLimit,
-      routerNeglect: routerNeglect,
-      initialLocation: initialLocation,
-      overridePlatformDefaultLocation: overridePlatformDefaultLocation,
-      initialExtra: initialExtra,
-      observers: observers ?? [],
-      debugLogDiagnostics: debugLogDiagnostics,
-      navigatorKey: navigatorKey,
-      restorationScopeId: routerRestorationScopeId,
-      requestFocus: requestFocus,
-    );
+    routerConfig ??= RouteTree(
+        routeInfoList: routeInfoList,
+        routes: routes,
+        extraCodec: extraCodec,
+        onException: onException,
+        errorPageBuilder: errorPageBuilder,
+        errorBuilder: errorBuilder,
+        redirect: redirect,
+        refreshListenable: refreshListenable,
+        redirectLimit: redirectLimit,
+        routerNeglect: routerNeglect,
+        initialLocation: initialLocation,
+        overridePlatformDefaultLocation: overridePlatformDefaultLocation,
+        initialExtra: initialExtra,
+        observers: observers ?? [],
+        debugLogDiagnostics: debugLogDiagnostics,
+        navigatorKey: navigatorKey,
+        restorationScopeId: routerRestorationScopeId,
+        requestFocus: requestFocus,
+      );
 
     return MaterialApp.router(
       key: key,
