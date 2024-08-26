@@ -1,3 +1,7 @@
+## [1.0.6] - 26.08.2024
+
+* Can get popped value by waiting for goNamed
+
 ## [1.0.6] - 07.08.2024
 
 * Possible to put TreeNavigation.makeMaterialApp in the build

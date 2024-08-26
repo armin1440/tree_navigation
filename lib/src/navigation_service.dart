@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tree_navigation/src/pop_result.dart';
 import 'package:tree_navigation/src/route_info.dart';
 
 import 'navigation_int.dart';
@@ -8,24 +9,29 @@ import 'navigation_int.dart';
 class NavigationService extends NavigationInterface {
   NavigationService({required super.routeInfoList, required super.globalKeyList});
 
+  PopResult popResult = PopResult();
+
   @override
-  void goNamed(
+  Future<dynamic> goNamed(
     RouteInfo route, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
-  }) {
+  }) async {
     if (pendingRouteFunction != null) {
       Function copiedFunction = pendingRouteFunction!;
       pendingRouteFunction = null;
       copiedFunction();
+      return null;
     } else {
+      popResult = PopResult();
       context.goNamed(
         route.name,
         pathParameters: pathParameters,
         extra: extra,
         queryParameters: queryParameters,
       );
+      return await popResult.getFuture();
     }
   }
 
@@ -130,6 +136,7 @@ class NavigationService extends NavigationInterface {
 
   @override
   RouteInfo? pop({dynamic result}) {
+    popResult.setValue(result);
     context.pop(result);
     return previousRoute;
   }

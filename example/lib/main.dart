@@ -63,24 +63,35 @@ class _MyAppState extends State<MyApp> {
             title: 'Home',
             color: Colors.white,
           ),
-        ),
-        TreeShellRoute(
-          navigatorKey: shellKey,
-          pageWidget: (child) => MyHomePage(
-            title: 'Shell Route',
-            color: Colors.blue,
-            child: child,
-          ),
           routes: [
             TreeRoute(
               routeInfo: Routes.newPage,
               pageWidget: const MyHomePage(
-                title: 'Sub Shell',
+                title: 'Sub',
                 color: Colors.pink,
+                canPop: true,
               ),
             ),
           ],
         ),
+        // TreeShellRoute(
+        //   navigatorKey: shellKey,
+        //   pageWidget: (child) => MyHomePage(
+        //     title: 'Shell Route',
+        //     color: Colors.blue,
+        //     canPop: true,
+        //     child: child,
+        //   ),
+        //   routes: [
+        //     TreeRoute(
+        //       routeInfo: Routes.newPage,
+        //       pageWidget: const MyHomePage(
+        //         title: 'Sub Shell',
+        //         color: Colors.pink,
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     );
   }
@@ -93,7 +104,7 @@ abstract class Routes {
     isShellRoute: false,
   );
   static const RouteInfo newPage = RouteInfo(
-    path: '/newPage',
+    path: 'newPage',
     name: 'newPage',
     isShellRoute: false,
   );
@@ -102,19 +113,30 @@ abstract class Routes {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title, this.child, required this.color});
+  const MyHomePage({
+    super.key,
+    required this.title,
+    this.child,
+    required this.color,
+    this.canPop = false,
+  });
 
   final String title;
   final Widget? child;
   final Color color;
+  final bool canPop;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void changePage() {
-    TreeNavigation.navigator.goNamed(Routes.newPage);
+  Future<dynamic> changePage() async {
+    return await TreeNavigation.navigator.goNamed(Routes.newPage);
+  }
+
+  void pop() {
+    TreeNavigation.navigator.pop(result: 'Result');
   }
 
   @override
@@ -144,7 +166,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: changePage,
+        onPressed: !widget.canPop
+            ? () {
+                changePage().then((value) => print('Returned: $value'));
+              }
+            : pop,
         tooltip: 'Change Page',
         child: const Icon(Icons.change_circle),
       ),

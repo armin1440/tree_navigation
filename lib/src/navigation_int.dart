@@ -56,16 +56,11 @@ abstract class NavigationInterface {
     return reversedKeyList.last.currentContext!;
   }
 
-  void goNamed(RouteInfo route, {
+  Future<dynamic> goNamed(RouteInfo route, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
-  }) {
-    if (pendingRouteFunction != null) {
-      pendingRouteFunction!();
-      return;
-    }
-  }
+  });
 
   Future<T?> openDialog<T>({
     required Widget dialog,
