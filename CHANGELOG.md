@@ -1,4 +1,4 @@
-## [1.0.6] - 26.08.2024
+## [1.0.7] - 26.08.2024
 
 * Can get popped value by waiting for goNamed
 
