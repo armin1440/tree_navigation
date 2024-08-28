@@ -10,4 +10,6 @@ class PopResult<T> {
   void setValue(T result) {
     _completer.complete(result);
   }
+
+  bool get isCompleted => _completer.isCompleted;
 }

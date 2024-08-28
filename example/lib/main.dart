@@ -50,6 +50,10 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  void pop() {
+    TreeNavigation.navigator.pop(result: 'Result');
+  }
+
   @override
   Widget build(BuildContext context) {
     return TreeNavigation.makeMaterialApp(
@@ -59,19 +63,33 @@ class _MyAppState extends State<MyApp> {
       routes: [
         TreeRoute(
           routeInfo: Routes.home,
-          pageWidget: const MyHomePage(
+          pageWidget: MyHomePage(
             title: 'Home',
             color: Colors.white,
+            onPressedButton: () => TreeNavigation.navigator.goNamed(Routes.newPage).then((res) => print('Page Home Result is : $res')),
           ),
           routes: [
             TreeRoute(
-              routeInfo: Routes.newPage,
-              pageWidget: const MyHomePage(
-                title: 'Sub',
-                color: Colors.pink,
-                canPop: true,
-              ),
-            ),
+                routeInfo: Routes.newPage,
+                pageWidget: MyHomePage(
+                  title: 'Sub',
+                  color: Colors.pink,
+                  onPressedButton: () => TreeNavigation.navigator
+                      .goNamed(Routes.newPage2)
+                      .then((result) => print('Page Sub Result is : $result')),
+                  hasPopButton: true,
+                ),
+                routes: [
+                  TreeRoute(
+                    routeInfo: Routes.newPage2,
+                    pageWidget: MyHomePage(
+                      title: 'Sub2',
+                      color: Colors.orange,
+                      onPressedButton: () {},
+                      hasPopButton: true,
+                    ),
+                  ),
+                ]),
           ],
         ),
         // TreeShellRoute(
@@ -108,8 +126,13 @@ abstract class Routes {
     name: 'newPage',
     isShellRoute: false,
   );
+  static const RouteInfo newPage2 = RouteInfo(
+    path: 'newPage2',
+    name: 'newPage2',
+    isShellRoute: false,
+  );
 
-  static const List<RouteInfo> allRoutes = [home, newPage];
+  static const List<RouteInfo> allRoutes = [home, newPage, newPage2];
 }
 
 class MyHomePage extends StatefulWidget {
@@ -118,40 +141,23 @@ class MyHomePage extends StatefulWidget {
     required this.title,
     this.child,
     required this.color,
-    this.canPop = false,
+    required this.onPressedButton,
+    this.hasPopButton = false,
   });
 
   final String title;
   final Widget? child;
   final Color color;
-  final bool canPop;
+  final Function onPressedButton;
+  final bool hasPopButton;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<dynamic> changePage() async {
-    return await TreeNavigation.navigator.goNamed(Routes.newPage);
-  }
-
-  void pop() {
-    TreeNavigation.navigator.pop(result: 'Result');
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (widget.title == 'Sub Shell') {
-      return Container(
-        color: widget.color,
-        padding: const EdgeInsets.all(100),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[if (widget.child != null) widget.child! else Text(widget.title)],
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -162,15 +168,18 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: const EdgeInsets.all(100),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[if (widget.child != null) widget.child! else Text(widget.title)],
+          children: <Widget>[
+            if (widget.child != null) widget.child! else Text(widget.title),
+            if (widget.hasPopButton)
+              TextButton(
+                onPressed: () => TreeNavigation.navigator.pop(result: widget.title),
+                child: const Text('Pop'),
+              )
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: !widget.canPop
-            ? () {
-                changePage().then((value) => print('Returned: $value'));
-              }
-            : pop,
+        onPressed: () => widget.onPressedButton(),
         tooltip: 'Change Page',
         child: const Icon(Icons.change_circle),
       ),

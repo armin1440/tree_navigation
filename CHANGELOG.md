@@ -1,3 +1,7 @@
+## [1.0.8] - 28.08.2024
+
+* Consecutive pops will not raise "Bad State Element" exception.
+
 ## [1.0.7] - 26.08.2024
 
 * Can get popped value by waiting for goNamed

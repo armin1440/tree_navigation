@@ -9,7 +9,7 @@ import 'navigation_int.dart';
 class NavigationService extends NavigationInterface {
   NavigationService({required super.routeInfoList, required super.globalKeyList});
 
-  PopResult popResult = PopResult();
+  List<PopResult> popResultList = [];
 
   @override
   Future<dynamic> goNamed(
@@ -24,14 +24,15 @@ class NavigationService extends NavigationInterface {
       copiedFunction();
       return null;
     } else {
-      popResult = PopResult();
+      PopResult newResult = PopResult();
+      popResultList.add(newResult);
       context.goNamed(
         route.name,
         pathParameters: pathParameters,
         extra: extra,
         queryParameters: queryParameters,
       );
-      return await popResult.getFuture();
+      return await newResult.getFuture();
     }
   }
 
@@ -136,7 +137,13 @@ class NavigationService extends NavigationInterface {
 
   @override
   RouteInfo? pop({dynamic result}) {
-    popResult.setValue(result);
+    if(popResultList.isNotEmpty) {
+      PopResult popResult = popResultList.last;
+      if (!popResult.isCompleted) {
+        popResult.setValue(result);
+      }
+      popResultList.removeLast();
+    }
     context.pop(result);
     return previousRoute;
   }
