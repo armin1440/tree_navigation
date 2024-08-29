@@ -1,3 +1,7 @@
+## [1.0.9] - 29.08.2024
+
+* Pop ups do not mess with "then" clause of goNamed functions.
+
 ## [1.0.8] - 28.08.2024
 
 * Consecutive pops will not raise "Bad State Element" exception.

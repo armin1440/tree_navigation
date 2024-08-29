@@ -49,8 +49,12 @@ class NavigationService extends NavigationInterface {
     TraversalEdgeBehavior? traversalEdgeBehavior,
   }) async {
     String runtimeType = dialog.runtimeType.toString();
-    registerPopUp(runtimeType: runtimeType, key: dialog.key, isDialog: true);
+    String popUpName = '${currentRoute?.name}$runtimeType';
+    registerPopUp(name: popUpName, key: dialog.key, isDialog: true);
     String dialogNameAndKey = openedDialogOrBottomSheetList.last;
+
+    PopResult newResult = PopResult();
+    popResultList.add(newResult);
 
     T? output;
     output = await showDialog<T>(
@@ -91,8 +95,12 @@ class NavigationService extends NavigationInterface {
     Offset? anchorPoint,
   }) async {
     String runtimeType = bottomSheet.runtimeType.toString();
-    registerPopUp(runtimeType: runtimeType, key: bottomSheet.key, isDialog: false);
+    String name = '${currentRoute?.name}$runtimeType';
+    registerPopUp(name: name, key: bottomSheet.key, isDialog: false);
     String bottomSheetNameAndKey = openedDialogOrBottomSheetList.last;
+
+    PopResult newResult = PopResult();
+    popResultList.add(newResult);
 
     T? output = await showModalBottomSheet<T>(
       context: context,
@@ -137,7 +145,7 @@ class NavigationService extends NavigationInterface {
 
   @override
   RouteInfo? pop({dynamic result}) {
-    if(popResultList.isNotEmpty) {
+    if (popResultList.isNotEmpty) {
       PopResult popResult = popResultList.last;
       if (!popResult.isCompleted) {
         popResult.setValue(result);

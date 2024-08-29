@@ -8,16 +8,17 @@ import '../tree_navigation.dart';
 import 'package:get_it/get_it.dart';
 
 typedef RouteTreeDefaultPageBuilder = Page<dynamic> Function(
-    BuildContext context,
-    GoRouterState state,
-    Widget widget,
-    );
+  BuildContext context,
+  GoRouterState state,
+  Widget widget,
+  String routeName,
+);
 typedef RouteTreeDefaultShellPageBuilder = Page<dynamic> Function(
-    BuildContext context,
-    GoRouterState state,
-    Widget Function(Widget) parent,
-    Widget childWidget,
-    );
+  BuildContext context,
+  GoRouterState state,
+  Widget Function(Widget) parent,
+  Widget childWidget,
+);
 
 abstract class TreeNavigation {
   static RouteTreeDefaultPageBuilder? defaultPageBuilder;
@@ -29,7 +30,7 @@ abstract class TreeNavigation {
     required List<GlobalKey<NavigatorState>> globalKeyList,
     RouteTreeDefaultPageBuilder? routeTreeDefaultPageBuilder,
     RouteTreeDefaultShellPageBuilder? routeTreeDefaultShellPageBuilder,
-  }){
+  }) {
     TreeNavigation.defaultPageBuilder = routeTreeDefaultPageBuilder;
     TreeNavigation.defaultShellPageBuilder = routeTreeDefaultShellPageBuilder;
 
@@ -109,25 +110,25 @@ abstract class TreeNavigation {
     bool requestFocus = true,
   }) {
     routerConfig ??= RouteTree(
-        routeInfoList: routeInfoList,
-        routes: routes,
-        extraCodec: extraCodec,
-        onException: onException,
-        errorPageBuilder: errorPageBuilder,
-        errorBuilder: errorBuilder,
-        redirect: redirect,
-        refreshListenable: refreshListenable,
-        redirectLimit: redirectLimit,
-        routerNeglect: routerNeglect,
-        initialLocation: initialLocation,
-        overridePlatformDefaultLocation: overridePlatformDefaultLocation,
-        initialExtra: initialExtra,
-        observers: observers ?? [],
-        debugLogDiagnostics: debugLogDiagnostics,
-        navigatorKey: navigatorKey,
-        restorationScopeId: routerRestorationScopeId,
-        requestFocus: requestFocus,
-      );
+      routeInfoList: routeInfoList,
+      routes: routes,
+      extraCodec: extraCodec,
+      onException: onException,
+      errorPageBuilder: errorPageBuilder,
+      errorBuilder: errorBuilder,
+      redirect: redirect,
+      refreshListenable: refreshListenable,
+      redirectLimit: redirectLimit,
+      routerNeglect: routerNeglect,
+      initialLocation: initialLocation,
+      overridePlatformDefaultLocation: overridePlatformDefaultLocation,
+      initialExtra: initialExtra,
+      observers: observers ?? [],
+      debugLogDiagnostics: debugLogDiagnostics,
+      navigatorKey: navigatorKey,
+      restorationScopeId: routerRestorationScopeId,
+      requestFocus: requestFocus,
+    );
 
     return MaterialApp.router(
       key: key,

@@ -179,11 +179,11 @@ abstract class NavigationInterface {
   }
 
   void registerPopUp({
-    required String runtimeType,
+    required String name,
     required bool isDialog,
     Key? key,
   }) {
-    String popUpNameAndKey = createPopUpNameAndKeyString(name: runtimeType, key: key);
+    String popUpNameAndKey = createPopUpNameAndKeyString(name: name, key: key);
     _addPopUpNameAndKey(popUpNameAndKey: popUpNameAndKey, isDialog: isDialog);
   }
 
