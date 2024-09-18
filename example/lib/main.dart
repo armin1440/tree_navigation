@@ -5,9 +5,8 @@ GlobalKey<NavigatorState> topKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> shellKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  runApp(RouteProvider(
-      child: const MyApp()
-  ),
+  runApp(
+    RouteProvider(child: const MyApp()),
   );
 }
 
@@ -28,7 +27,7 @@ class _MyAppState extends State<MyApp> {
       routeTreeDefaultPageBuilder: (_, state, child, routeName) => MyCustomTransitionPage(
         key: state.pageKey,
         child: child,
-        name: routeName,
+        // name: routeName,
         transitionsBuilder: (_, animation, ___, widget) {
           return FadeTransition(
             opacity: animation,
@@ -66,34 +65,72 @@ class _MyAppState extends State<MyApp> {
       routeInfoList: Routes.allRoutes,
       routes: [
         TreeRoute(
+            routeInfo: Routes.home1,
+            pageWidget: MyHomePage(
+              title: 'Home1',
+              color: Colors.indigo,
+              onPressedButton: () => TreeNavigation.navigator.go('${Routes.home1.path}/${Routes.newPage2.path}').then(
+                    (res) => print('Page1 Home Result is : $res'),
+                  ),
+            ),
+            routes: [
+              TreeRoute(
+                routeInfo: Routes.newPage2,
+                pageWidget: MyHomePage(
+                  title: 'Sub2',
+                  color: Colors.orange,
+                  onPressedButton: () {
+                    TreeNavigation.navigator
+                        .openDialog(
+                            dialog: Dialog(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text('Pop Me'),
+                          TextButton(
+                            onPressed: () => TreeNavigation.navigator.pop(result: 'sub2 dialog'),
+                            child: Text('POP'),
+                          ),
+                        ],
+                      ),
+                    ))
+                        .then((value) {
+                      print('After dialog pop: $value');
+                    });
+                  },
+                  hasPopButton: true,
+                ),
+              )
+            ]),
+        TreeRoute(
           routeInfo: Routes.home,
           pageWidget: MyHomePage(
             title: 'Home',
             color: Colors.white,
             onPressedButton: () =>
-                TreeNavigation.navigator.goNamed(Routes.newPage).then((res) => print('Page Home Result is : $res')),
+                TreeNavigation.navigator.go(Routes.home1.path).then((res) => print('Page Home Result is : $res')),
           ),
           routes: [
             TreeRoute(
                 routeInfo: Routes.newPage,
                 pageBuilder: (_, state) => MyCustomTransitionPage(
-                  key: state.pageKey,
-                  name: Routes.newPage.name,
-                  child: MyHomePage(
-                    title: 'Sub',
-                    color: Colors.pink,
-                    onPressedButton: () => TreeNavigation.navigator
-                        .goNamed(Routes.newPage2)
-                        .then((result) => print('Page Sub Result is : $result')),
-                    hasPopButton: true,
-                  ),
-                  transitionsBuilder: (_, animation, ___, widget) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: widget,
-                    );
-                  },
-                ),
+                      key: state.pageKey,
+                      // name: Routes.newPage.name,
+                      child: MyHomePage(
+                        title: 'Sub',
+                        color: Colors.pink,
+                        onPressedButton: () => TreeNavigation.navigator
+                            .goNamed(Routes.newPage2)
+                            .then((result) => print('Page Sub Result is : $result')),
+                        hasPopButton: true,
+                      ),
+                      transitionsBuilder: (_, animation, ___, widget) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: widget,
+                        );
+                      },
+                    ),
                 routes: [
                   TreeRoute(
                     routeInfo: Routes.newPage2,
@@ -149,6 +186,11 @@ class _MyAppState extends State<MyApp> {
 }
 
 abstract class Routes {
+  static const RouteInfo home1 = RouteInfo(
+    path: '/h1',
+    name: 'home',
+    isShellRoute: false,
+  );
   static const RouteInfo home = RouteInfo(
     path: '/',
     name: 'home',
@@ -165,7 +207,7 @@ abstract class Routes {
     isShellRoute: false,
   );
 
-  static const List<RouteInfo> allRoutes = [home, newPage, newPage2];
+  static const List<RouteInfo> allRoutes = [home1, home, newPage, newPage2];
 }
 
 class MyHomePage extends StatefulWidget {

@@ -37,6 +37,24 @@ class NavigationService extends NavigationInterface {
   }
 
   @override
+  Future<dynamic> go(String location, {Object? extra}) async {
+    if (pendingRouteFunction != null) {
+      Function copiedFunction = pendingRouteFunction!;
+      pendingRouteFunction = null;
+      copiedFunction();
+      return null;
+    } else {
+      PopResult newResult = PopResult();
+      popResultList.add(newResult);
+      context.go(
+        location,
+        extra: extra,
+      );
+      return await newResult.getFuture();
+    }
+  }
+
+  @override
   Future<T?> openDialog<T>({
     required Widget dialog,
     bool barrierDismissible = true,

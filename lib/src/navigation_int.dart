@@ -62,6 +62,8 @@ abstract class NavigationInterface {
     Object? extra,
   });
 
+  Future<dynamic> go(String location, {Object? extra});
+
   Future<T?> openDialog<T>({
     required Widget dialog,
     bool barrierDismissible = true,
