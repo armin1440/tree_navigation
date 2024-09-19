@@ -1,8 +1,12 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:tree_navigation/src/exceptions.dart';
 import 'package:tree_navigation/src/pop_result.dart';
 import 'package:tree_navigation/src/route_info.dart';
+import 'package:tree_navigation/src/route_tree.dart';
+import 'package:tree_navigation/src/tree_material_app.dart';
+import 'package:tree_navigation/src/tree_route.dart';
 
 import 'navigation_int.dart';
 
@@ -26,28 +30,29 @@ class NavigationService extends NavigationInterface {
     } else {
       PopResult newResult = PopResult();
       popResultList.add(newResult);
-      context.goNamed(
-        route.name,
-        pathParameters: pathParameters,
-        extra: extra,
-        queryParameters: queryParameters,
-      );
+      // context.goNamed(
+      // route.name,
+      // pathParameters: pathParameters,
+      // extra: extra,
+      // queryParameters: queryParameters,
+      // );
       return await newResult.getFuture();
     }
   }
 
   @override
-  Future<dynamic> go(String location, {Object? extra}) async {
+  Future<dynamic> go(String location, {Object? extra, String? parentPath}) async {
     if (pendingRouteFunction != null) {
       Function copiedFunction = pendingRouteFunction!;
       pendingRouteFunction = null;
       copiedFunction();
       return null;
     } else {
+      String path = _generatePath(lastPathPart: location, parentPath: parentPath);
       PopResult newResult = PopResult();
       popResultList.add(newResult);
       context.go(
-        location,
+        path,
         extra: extra,
       );
       return await newResult.getFuture();
@@ -67,8 +72,8 @@ class NavigationService extends NavigationInterface {
     TraversalEdgeBehavior? traversalEdgeBehavior,
   }) async {
     String runtimeType = dialog.runtimeType.toString();
-    String popUpName = '${currentRoute?.name}$runtimeType';
-    registerPopUp(name: popUpName, key: dialog.key, isDialog: true);
+    // String popUpName = '${currentRoute?.name}$runtimeType';
+    registerPopUp(name: 'popUpName', key: dialog.key, isDialog: true);
     String dialogNameAndKey = openedDialogOrBottomSheetList.last;
 
     PopResult newResult = PopResult();
@@ -113,8 +118,8 @@ class NavigationService extends NavigationInterface {
     Offset? anchorPoint,
   }) async {
     String runtimeType = bottomSheet.runtimeType.toString();
-    String name = '${currentRoute?.name}$runtimeType';
-    registerPopUp(name: name, key: bottomSheet.key, isDialog: false);
+    // String name = '${currentRoute?.name}$runtimeType';
+    registerPopUp(name: 'name', key: bottomSheet.key, isDialog: false);
     String bottomSheetNameAndKey = openedDialogOrBottomSheetList.last;
 
     PopResult newResult = PopResult();
@@ -172,5 +177,60 @@ class NavigationService extends NavigationInterface {
     }
     context.pop(result);
     return previousRoute;
+  }
+
+  String _generatePath({required String lastPathPart, required String? parentPath}) {
+    String path = '';
+    if (TreeNavigation.routeTree != null) {
+      String? finalPath = _generateFullPath(lastPathPart: lastPathPart, parentPath: parentPath);
+      if (finalPath == null) {
+        throw RouteNotFoundException(lastPathPart);
+      } else {
+        path = finalPath;
+      }
+    }
+    return path;
+  }
+
+  String? _generateFullPath({
+    required String lastPathPart,
+    String? parentPath,
+    String pathToHere = '',
+    RouteBase? root,
+  }) {
+    List<RouteBase> routes = TreeNavigation.routeTree ?? [];
+    String? output;
+    for (var route in (root?.routes ?? routes)) {
+      String trimmedTmpPath = route is TreeRoute ? route.path.replaceAll('/', '') : '';
+      String trimmedLastPathPart = lastPathPart.replaceAll('/', '');
+      if (trimmedTmpPath == trimmedLastPathPart) {
+        String fullPath = '$pathToHere/$trimmedTmpPath';
+        List<String> pathParts = fullPath.split('/');
+        if (parentPath != null) {
+          String trimmedParent = parentPath.replaceAll('/', '');
+          if (pathParts.contains(trimmedParent)) {
+            output = fullPath;
+            break;
+          }
+        } else {
+          output = fullPath;
+          break;
+        }
+      }
+      bool hasChildren = route.routes.isNotEmpty;
+      if (hasChildren) {
+        output = _generateFullPath(
+          lastPathPart: lastPathPart,
+          parentPath: parentPath,
+          pathToHere: '$pathToHere${trimmedTmpPath.isNotEmpty ? '/' : ''}$trimmedTmpPath',
+          root: route,
+        );
+        if (output != null) {
+          break;
+        }
+      }
+    }
+
+    return output;
   }
 }

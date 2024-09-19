@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
     TreeNavigation.init(
       globalKeyList: [topKey, shellKey],
       routeInfoList: Routes.allRoutes,
-      routeTreeDefaultPageBuilder: (_, state, child, routeName) => MyCustomTransitionPage(
+      routeTreeDefaultPageBuilder: (_, state, child) => MyCustomTransitionPage(
         key: state.pageKey,
         child: child,
         // name: routeName,
@@ -65,24 +65,24 @@ class _MyAppState extends State<MyApp> {
       routeInfoList: Routes.allRoutes,
       routes: [
         TreeRoute(
-            routeInfo: Routes.home1,
-            pageWidget: MyHomePage(
-              title: 'Home1',
-              color: Colors.indigo,
-              onPressedButton: () => TreeNavigation.navigator.go('${Routes.home1.path}/${Routes.newPage2.path}').then(
-                    (res) => print('Page1 Home Result is : $res'),
-                  ),
-            ),
-            routes: [
-              TreeRoute(
-                routeInfo: Routes.newPage2,
-                pageWidget: MyHomePage(
-                  title: 'Sub2',
-                  color: Colors.orange,
-                  onPressedButton: () {
-                    TreeNavigation.navigator
-                        .openDialog(
-                            dialog: Dialog(
+          routeInfo: Routes.home1,
+          pageWidget: MyHomePage(
+            title: 'Home1',
+            color: Colors.indigo,
+            onPressedButton: () => TreeNavigation.navigator.go(Routes.newPage2.path, parentPath: Routes.newPage.path).then(
+                  (res) => print('Page1 Home Result is : $res'),
+                ),
+          ),
+          routes: [
+            TreeRoute(
+              routeInfo: Routes.newPage2,
+              pageWidget: MyHomePage(
+                title: 'Sub2',
+                color: Colors.orange,
+                onPressedButton: () {
+                  TreeNavigation.navigator
+                      .openDialog(
+                    dialog: Dialog(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
@@ -93,15 +93,19 @@ class _MyAppState extends State<MyApp> {
                           ),
                         ],
                       ),
-                    ))
-                        .then((value) {
+                    ),
+                  )
+                      .then(
+                    (value) {
                       print('After dialog pop: $value');
-                    });
-                  },
-                  hasPopButton: true,
-                ),
-              )
-            ]),
+                    },
+                  );
+                },
+                hasPopButton: true,
+              ),
+            )
+          ],
+        ),
         TreeRoute(
           routeInfo: Routes.home,
           pageWidget: MyHomePage(
@@ -112,35 +116,35 @@ class _MyAppState extends State<MyApp> {
           ),
           routes: [
             TreeRoute(
-                routeInfo: Routes.newPage,
-                pageBuilder: (_, state) => MyCustomTransitionPage(
-                      key: state.pageKey,
-                      // name: Routes.newPage.name,
-                      child: MyHomePage(
-                        title: 'Sub',
-                        color: Colors.pink,
-                        onPressedButton: () => TreeNavigation.navigator
-                            .goNamed(Routes.newPage2)
-                            .then((result) => print('Page Sub Result is : $result')),
-                        hasPopButton: true,
-                      ),
-                      transitionsBuilder: (_, animation, ___, widget) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: widget,
-                        );
-                      },
-                    ),
-                routes: [
-                  TreeRoute(
-                    routeInfo: Routes.newPage2,
-                    pageWidget: MyHomePage(
-                      title: 'Sub2',
-                      color: Colors.orange,
-                      onPressedButton: () {
-                        TreeNavigation.navigator
-                            .openDialog(
-                                dialog: Dialog(
+              routeInfo: Routes.newPage,
+              pageBuilder: (_, state) => MyCustomTransitionPage(
+                key: state.pageKey,
+                // name: Routes.newPage.name,
+                child: MyHomePage(
+                  title: 'Sub',
+                  color: Colors.pink,
+                  onPressedButton: () => TreeNavigation.navigator
+                      .goNamed(Routes.newPage2)
+                      .then((result) => print('Page Sub Result is : $result')),
+                  hasPopButton: true,
+                ),
+                transitionsBuilder: (_, animation, ___, widget) {
+                  return FadeTransition(
+                    opacity: animation,
+                    child: widget,
+                  );
+                },
+              ),
+              routes: [
+                TreeRoute(
+                  routeInfo: Routes.newPage2,
+                  pageWidget: MyHomePage(
+                    title: 'Sub2',
+                    color: Colors.orange,
+                    onPressedButton: () {
+                      TreeNavigation.navigator
+                          .openDialog(
+                        dialog: Dialog(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -151,15 +155,19 @@ class _MyAppState extends State<MyApp> {
                               ),
                             ],
                           ),
-                        ))
-                            .then((value) {
+                        ),
+                      )
+                          .then(
+                        (value) {
                           print('After dialog pop: $value');
-                        });
-                      },
-                      hasPopButton: true,
-                    ),
+                        },
+                      );
+                    },
+                    hasPopButton: true,
                   ),
-                ]),
+                ),
+              ],
+            ),
           ],
         ),
         // TreeShellRoute(
@@ -188,22 +196,22 @@ class _MyAppState extends State<MyApp> {
 abstract class Routes {
   static const RouteInfo home1 = RouteInfo(
     path: '/h1',
-    name: 'home',
+    // name: 'home',
     isShellRoute: false,
   );
   static const RouteInfo home = RouteInfo(
     path: '/',
-    name: 'home',
+    // name: 'home',
     isShellRoute: false,
   );
   static const RouteInfo newPage = RouteInfo(
     path: 'newPage',
-    name: 'newPage',
+    // name: 'newPage',
     isShellRoute: false,
   );
   static const RouteInfo newPage2 = RouteInfo(
     path: 'newPage2',
-    name: 'newPage2',
+    // name: 'newPage2',
     isShellRoute: false,
   );
 
@@ -252,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             TextButton(
               onPressed: () {
-                print(RouteProvider.of(context)?.name);
+                // print(RouteProvider.of(context)?.name);
               },
               child: Text('My Route'),
             ),

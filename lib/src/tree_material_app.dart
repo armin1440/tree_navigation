@@ -11,7 +11,7 @@ typedef RouteTreeDefaultPageBuilder = Page<dynamic> Function(
   BuildContext context,
   GoRouterState state,
   Widget widget,
-  String routeName,
+  // String routeName,
 );
 typedef RouteTreeDefaultShellPageBuilder = Page<dynamic> Function(
   BuildContext context,
@@ -24,6 +24,7 @@ abstract class TreeNavigation {
   static RouteTreeDefaultPageBuilder? defaultPageBuilder;
   static RouteTreeDefaultShellPageBuilder? defaultShellPageBuilder;
   static RouterConfig<Object>? routerConfig;
+  static List<RouteBase>? routeTree;
 
   static void init({
     required List<RouteInfo> routeInfoList,
@@ -109,6 +110,7 @@ abstract class TreeNavigation {
     String? routerRestorationScopeId,
     bool requestFocus = true,
   }) {
+    routeTree = routes;
     routerConfig ??= RouteTree(
       routeInfoList: routeInfoList,
       routes: routes,
