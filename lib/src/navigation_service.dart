@@ -144,7 +144,7 @@ class NavigationService extends NavigationInterface {
   }
 
   @override
-  RouteInfo? pop({dynamic result}) {
+  void pop({dynamic result}) {
     if (popResultList.isNotEmpty) {
       PopResult popResult = popResultList.last;
       if (!popResult.isCompleted) {
@@ -153,6 +153,5 @@ class NavigationService extends NavigationInterface {
       popResultList.removeLast();
     }
     context.pop(result);
-    return previousRoute;
   }
 }

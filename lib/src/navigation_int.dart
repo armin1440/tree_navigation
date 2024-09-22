@@ -102,7 +102,7 @@ abstract class NavigationInterface {
 
   void openDrawer();
 
-  RouteInfo? pop({dynamic result});
+  void pop({dynamic result});
 
   bool get isDialogOpen => openedDialogList.isNotEmpty;
 
@@ -153,7 +153,8 @@ abstract class NavigationInterface {
     popAllPopUps();
     RouteInfo? previousRoute;
     do {
-      previousRoute = pop();
+      pop();
+      previousRoute = currentRoute;
     } while (previousRoute == null ? false : !verifyCondition(previousRoute));
   }
 
