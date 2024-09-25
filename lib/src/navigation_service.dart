@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -156,13 +158,16 @@ class NavigationService extends NavigationInterface {
   }
 
   @override
-  void disposeRoute({
+  Future<void> disposeRoute({
     required RouteInfo? previousRoute,
     required RouteInfo poppedRoute,
     bool updateStack = true,
     dynamic result,
-  }) {
-    _completePopResult(result: null);
+  }) async {
+    if(result is Future){
+      result = await result;
+    }
+    _completePopResult(result: result);
     super.disposeRoute(previousRoute: previousRoute, poppedRoute: poppedRoute, updateStack: updateStack);
   }
 

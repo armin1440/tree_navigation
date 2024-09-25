@@ -44,7 +44,7 @@ class MyNavigationObserver extends NavigatorObserver {
       NavigationInterface navigation = GetIt.instance<NavigationInterface>();
       RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
       navigation.previousRoute = previousRouteInfo;
-      navigation.disposeRoute(previousRoute: previousRouteInfo, poppedRoute: routeName);
+      navigation.disposeRoute(previousRoute: previousRouteInfo, poppedRoute: routeName, result: route.popped);
       // });
       log('Popping to ${previousRoute?.settings.name} from ${routeName.name}');
     }
