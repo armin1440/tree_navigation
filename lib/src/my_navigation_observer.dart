@@ -27,10 +27,10 @@ class MyNavigationObserver extends NavigatorObserver {
     if (routeName != null) {
       navigation.previousRoute = previousRouteInfo;
       // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        navigation.initializeRoute(
-          routeName,
-          addToStack: !routeName.isShellRoute,
-        );
+      navigation.initializeRoute(
+        routeName,
+        addToStack: !routeName.isShellRoute,
+      );
       // });
       log('Pushing to ${routeName.name} from ${previousRoute?.settings.name}');
     }
@@ -41,10 +41,10 @@ class MyNavigationObserver extends NavigatorObserver {
     RouteInfo? routeName = _findRouteByName(routeName: route.settings.name ?? '');
     if (routeName != null) {
       // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        NavigationInterface navigation = GetIt.instance<NavigationInterface>();
-        RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
-        navigation.previousRoute = previousRouteInfo;
-        navigation.disposeRoute(previousRoute: previousRouteInfo, poppedRoute: routeName);
+      NavigationInterface navigation = GetIt.instance<NavigationInterface>();
+      RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
+      navigation.previousRoute = previousRouteInfo;
+      navigation.disposeRoute(previousRoute: previousRouteInfo, poppedRoute: routeName);
       // });
       log('Popping to ${previousRoute?.settings.name} from ${routeName.name}');
     }
@@ -56,22 +56,25 @@ class MyNavigationObserver extends NavigatorObserver {
 
     if (routeName != null) {
       // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        NavigationInterface navigation = GetIt.instance<NavigationInterface>();
-        RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
-        if (routeName.isShellRoute) {
-          //disposing children of the shell route because they are not disposed automatically.
-          navigation.stack.sublist(0, navigation.stack.length - 1).reversed.forEach((element) {
-            navigation.registeredControllers[element]?.onDispose();
-          });
-          //keeping the last element in the stack because it is the new page that is navigated to.
-          navigation.stack = [navigation.stack.last];
-        }
-        navigation.previousRoute = previousRouteInfo;
-        navigation.disposeRoute(
-          previousRoute: previousRouteInfo,
-          poppedRoute: routeName,
-          updateStack: !routeName.isShellRoute,
-        );
+      NavigationInterface navigation = GetIt.instance<NavigationInterface>();
+      RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
+      if (routeName.isShellRoute) {
+        //disposing children of the shell route because they are not disposed automatically.
+        navigation.stack
+            .sublist(0, navigation.stack.length - 1)
+            .reversed
+            .forEach((element) {
+          navigation.registeredControllers[element]?.onDispose();
+        });
+        //keeping the last element in the stack because it is the new page that is navigated to.
+        navigation.stack = [navigation.stack.last];
+      }
+      navigation.previousRoute = previousRouteInfo;
+      navigation.disposeRoute(
+        previousRoute: previousRouteInfo,
+        poppedRoute: routeName,
+        updateStack: !routeName.isShellRoute,
+      );
       // });
       log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
     }

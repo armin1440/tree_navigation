@@ -54,10 +54,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void pop() {
-    TreeNavigation.navigator.pop(result: 'Result');
-  }
-
   @override
   Widget build(BuildContext context) {
     return TreeNavigation.makeMaterialApp(

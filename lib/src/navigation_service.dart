@@ -145,6 +145,28 @@ class NavigationService extends NavigationInterface {
 
   @override
   void pop({dynamic result}) {
+    // if (popResultList.isNotEmpty) {
+    //   PopResult popResult = popResultList.last;
+    //   if (!popResult.isCompleted) {
+    //     popResult.setValue(result);
+    //   }
+    //   popResultList.removeLast();
+    // }
+    context.pop(result);
+  }
+
+  @override
+  void disposeRoute({
+    required RouteInfo? previousRoute,
+    required RouteInfo poppedRoute,
+    bool updateStack = true,
+    dynamic result,
+  }) {
+    _completePopResult(result: null);
+    super.disposeRoute(previousRoute: previousRoute, poppedRoute: poppedRoute, updateStack: updateStack);
+  }
+
+  void _completePopResult({dynamic result}) {
     if (popResultList.isNotEmpty) {
       PopResult popResult = popResultList.last;
       if (!popResult.isCompleted) {
@@ -152,6 +174,5 @@ class NavigationService extends NavigationInterface {
       }
       popResultList.removeLast();
     }
-    context.pop(result);
   }
 }
