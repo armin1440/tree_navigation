@@ -1,3 +1,7 @@
+## [1.0.11] - 25.09.2024
+
+* Fixed calling then clause after popping by phone button or gesture
+
 ## [1.0.10] - 22.09.2024
 
 * Fixed pop until route
