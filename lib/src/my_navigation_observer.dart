@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:tree_navigation/src/navigation_two_service.dart';
 import 'package:tree_navigation/src/route_info.dart';
 
 import 'navigation_int.dart';
@@ -27,12 +26,10 @@ class MyNavigationObserver extends NavigatorObserver {
     NavigationInterface navigation = GetIt.instance<NavigationInterface>();
     if (routeName != null) {
       navigation.previousRoute = previousRouteInfo;
-      // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       navigation.initializeRoute(
         routeName,
         addToStack: !routeName.isShellRoute,
       );
-      // });
       log('Pushing to ${routeName.name} from ${previousRoute?.settings.name}');
     }
   }
@@ -41,12 +38,10 @@ class MyNavigationObserver extends NavigatorObserver {
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     RouteInfo? routeName = _findRouteByName(routeName: route.settings.name ?? '');
     if (routeName != null) {
-      // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       NavigationInterface navigation = GetIt.instance<NavigationInterface>();
       RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
       navigation.previousRoute = previousRouteInfo;
       navigation.disposeRoute(previousRoute: previousRouteInfo, poppedRoute: routeName, result: route.popped);
-      // });
       log('Popping to ${previousRoute?.settings.name} from ${routeName.name}');
     }
   }
@@ -56,7 +51,6 @@ class MyNavigationObserver extends NavigatorObserver {
     RouteInfo? routeName = _findRouteByName(routeName: route.settings.name ?? '');
 
     if (routeName != null) {
-      // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       NavigationInterface navigation = GetIt.instance<NavigationInterface>();
       RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
       if (routeName.isShellRoute) {
@@ -75,7 +69,6 @@ class MyNavigationObserver extends NavigatorObserver {
         updateStack: !routeName.isShellRoute,
       );
 
-      // });
       log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
     }
   }

@@ -11,8 +11,6 @@ import 'navigation_int.dart';
 class NavigationOneService extends NavigationInterface {
   NavigationOneService({required super.routeInfoList, required super.globalKeyList});
 
-  // List<PopResult> popResultList = [];
-
   @override
   Future<dynamic> goNamed(
       RouteInfo route, {
@@ -26,15 +24,12 @@ class NavigationOneService extends NavigationInterface {
       copiedFunction();
       return null;
     } else {
-      // PopResult newResult = PopResult();
-      // popResultList.add(newResult);
       return context.pushNamed(
         route.name,
         pathParameters: pathParameters,
         extra: extra,
         queryParameters: queryParameters,
       );
-      // return await newResult.getFuture();
     }
   }
 
@@ -54,9 +49,6 @@ class NavigationOneService extends NavigationInterface {
     String popUpName = '${currentRoute?.name}$runtimeType';
     registerPopUp(name: popUpName, key: dialog.key, isDialog: true);
     String dialogNameAndKey = openedDialogOrBottomSheetList.last;
-
-    // PopResult newResult = PopResult();
-    // popResultList.add(newResult);
 
     T? output;
     output = await showDialog<T>(
@@ -101,9 +93,6 @@ class NavigationOneService extends NavigationInterface {
     registerPopUp(name: name, key: bottomSheet.key, isDialog: false);
     String bottomSheetNameAndKey = openedDialogOrBottomSheetList.last;
 
-    // PopResult newResult = PopResult();
-    // popResultList.add(newResult);
-
     T? output = await showModalBottomSheet<T>(
       context: context,
       builder: (_) => bottomSheet,
@@ -147,13 +136,6 @@ class NavigationOneService extends NavigationInterface {
 
   @override
   void pop({dynamic result}) {
-    // if (popResultList.isNotEmpty) {
-    //   PopResult popResult = popResultList.last;
-    //   if (!popResult.isCompleted) {
-    //     popResult.setValue(result);
-    //   }
-    //   popResultList.removeLast();
-    // }
     context.pop(result);
   }
 
@@ -164,20 +146,6 @@ class NavigationOneService extends NavigationInterface {
     bool updateStack = true,
     dynamic result,
   }) async {
-    // if(result is Future){
-    //   result = await result;
-    // }
-    // _completePopResult(result: result);
     super.disposeRoute(previousRoute: previousRoute, poppedRoute: poppedRoute, updateStack: updateStack);
   }
-
-  // void _completePopResult({dynamic result}) {
-  //   if (popResultList.isNotEmpty) {
-  //     PopResult popResult = popResultList.last;
-  //     if (!popResult.isCompleted) {
-  //       popResult.setValue(result);
-  //     }
-  //     popResultList.removeLast();
-  //   }
-  // }
 }
