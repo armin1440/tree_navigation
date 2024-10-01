@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import '../tree_navigation.dart';
 import 'package:get_it/get_it.dart';
 
+import 'navigation_one_service.dart';
+
 typedef RouteTreeDefaultPageBuilder = Page<dynamic> Function(
   BuildContext context,
   GoRouterState state,
@@ -30,14 +32,20 @@ abstract class TreeNavigation {
     required List<GlobalKey<NavigatorState>> globalKeyList,
     RouteTreeDefaultPageBuilder? routeTreeDefaultPageBuilder,
     RouteTreeDefaultShellPageBuilder? routeTreeDefaultShellPageBuilder,
+    bool useNavigationOne = false,
   }) {
     TreeNavigation.defaultPageBuilder = routeTreeDefaultPageBuilder;
     TreeNavigation.defaultShellPageBuilder = routeTreeDefaultShellPageBuilder;
 
-    NavigationInterface navigationInterface = NavigationService(
-      routeInfoList: routeInfoList,
-      globalKeyList: globalKeyList,
-    );
+    NavigationInterface navigationInterface = useNavigationOne
+        ? NavigationOneService(
+            routeInfoList: routeInfoList,
+            globalKeyList: globalKeyList,
+          )
+        : NavigationTwoService(
+            routeInfoList: routeInfoList,
+            globalKeyList: globalKeyList,
+          );
     GetIt.instance.registerSingleton<NavigationInterface>(navigationInterface);
   }
 

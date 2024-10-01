@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
+import 'package:tree_navigation/src/navigation_two_service.dart';
 import 'package:tree_navigation/src/route_info.dart';
 
 import 'navigation_int.dart';
@@ -60,21 +61,20 @@ class MyNavigationObserver extends NavigatorObserver {
       RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
       if (routeName.isShellRoute) {
         //disposing children of the shell route because they are not disposed automatically.
-        navigation.stack
-            .sublist(0, navigation.stack.length - 1)
-            .reversed
-            .forEach((element) {
+        navigation.stack.sublist(0, navigation.stack.length - 1).reversed.forEach((element) {
           navigation.registeredControllers[element]?.onDispose();
         });
         //keeping the last element in the stack because it is the new page that is navigated to.
         navigation.stack = [navigation.stack.last];
       }
       navigation.previousRoute = previousRouteInfo;
+
       navigation.disposeRoute(
         previousRoute: previousRouteInfo,
         poppedRoute: routeName,
         updateStack: !routeName.isShellRoute,
       );
+
       // });
       log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
     }

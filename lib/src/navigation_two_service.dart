@@ -8,8 +8,8 @@ import 'package:tree_navigation/src/route_info.dart';
 
 import 'navigation_int.dart';
 
-class NavigationService extends NavigationInterface {
-  NavigationService({required super.routeInfoList, required super.globalKeyList});
+class NavigationTwoService extends NavigationInterface {
+  NavigationTwoService({required super.routeInfoList, required super.globalKeyList});
 
   List<PopResult> popResultList = [];
 

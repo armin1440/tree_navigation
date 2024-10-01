@@ -1,3 +1,7 @@
+## [1.1.0] - 01.10.2024
+
+* Added navigation one
+
 ## [1.0.11] - 25.09.2024
 
 * Fixed calling then clause after popping by phone button or gesture

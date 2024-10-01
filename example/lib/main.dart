@@ -1,3 +1,4 @@
+import 'package:example/DotButton.dart';
 import 'package:flutter/material.dart';
 import 'package:tree_navigation/tree_navigation.dart';
 
@@ -23,6 +24,7 @@ class _MyAppState extends State<MyApp> {
   initState() {
     super.initState();
     TreeNavigation.init(
+      useNavigationOne: true,
       globalKeyList: [topKey, shellKey],
       routeInfoList: Routes.allRoutes,
       routeTreeDefaultPageBuilder: (_, state, child, routeName) => MyCustomTransitionPage(
@@ -66,80 +68,130 @@ class _MyAppState extends State<MyApp> {
           pageWidget: MyHomePage(
             title: 'Home',
             color: Colors.white,
-            onPressedButton: () =>
+            onPressedButton: () async =>
                 TreeNavigation.navigator.goNamed(Routes.newPage).then((res) => print('Page Home Result is : $res')),
           ),
-          routes: [
-            TreeRoute(
-                routeInfo: Routes.newPage,
-                pageBuilder: (_, state) => MyCustomTransitionPage(
-                  key: state.pageKey,
-                  name: Routes.newPage.name,
-                  child: MyHomePage(
-                    title: 'Sub',
-                    color: Colors.pink,
-                    onPressedButton: () => TreeNavigation.navigator
-                        .goNamed(Routes.newPage2)
-                        .then((result) => print('Page Sub Result is : $result')),
-                    hasPopButton: true,
-                  ),
-                  transitionsBuilder: (_, animation, ___, widget) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: widget,
-                    );
-                  },
-                ),
-                routes: [
-                  TreeRoute(
-                    routeInfo: Routes.newPage2,
-                    pageWidget: MyHomePage(
-                      title: 'Sub2',
-                      color: Colors.orange,
-                      onPressedButton: () {
-                        TreeNavigation.navigator
-                            .openDialog(
-                                dialog: Dialog(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text('Pop Me'),
-                              TextButton(
-                                onPressed: () => TreeNavigation.navigator.pop(result: 'sub2 dialog'),
-                                child: Text('POP'),
-                              ),
-                            ],
-                          ),
-                        ))
-                            .then((value) {
-                          print('After dialog pop: $value');
-                        });
-                      },
-                      hasPopButton: true,
-                    ),
-                  ),
-                ]),
-          ],
         ),
-        // TreeShellRoute(
-        //   navigatorKey: shellKey,
-        //   pageWidget: (child) => MyHomePage(
-        //     title: 'Shell Route',
-        //     color: Colors.blue,
-        //     canPop: true,
-        //     child: child,
-        //   ),
-        //   routes: [
-        //     TreeRoute(
-        //       routeInfo: Routes.newPage,
-        //       pageWidget: const MyHomePage(
-        //         title: 'Sub Shell',
-        //         color: Colors.pink,
-        //       ),
-        //     ),
-        //   ],
-        // ),
+        TreeRoute(
+          routeInfo: Routes.newPage2,
+          pageWidget: MyHomePage(
+            title: 'Sub2',
+            color: Colors.orange,
+            onPressedButton: () {
+              TreeNavigation.navigator
+                  .openDialog(
+                  dialog: Dialog(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Pop Me'),
+                        TextButton(
+                          onPressed: () => TreeNavigation.navigator.pop(result: 'sub2 dialog'),
+                          child: Text('POP'),
+                        ),
+                      ],
+                    ),
+                  ))
+                  .then((value) {
+                print('After dialog pop: $value');
+              });
+            },
+            hasPopButton: true,
+          ),
+        ),
+        TreeRoute(
+          routeInfo: Routes.newPage,
+          pageWidget: MyHomePage(
+            title: 'Sub Shell',
+            color: Colors.pink,
+            hasPopButton: true,
+            onPressedButton: (){
+              TreeNavigation.navigator.goNamed(Routes.newPage2).then((res) => print('Page New Page Result is : $res'));
+            },
+          ),
+        ),
       ],
+
+      // routes: [
+      //   TreeRoute(
+      //     routeInfo: Routes.home,
+      //     pageWidget: MyHomePage(
+      //       title: 'Home',
+      //       color: Colors.white,
+      //       onPressedButton: () async =>
+      //           TreeNavigation.navigator.goNamed(Routes.newPage).then((res) => print('Page Home Result is : $res')),
+      //     ),
+      //     routes: [
+      //       TreeRoute(
+      //           routeInfo: Routes.newPage,
+      //           pageBuilder: (_, state) => MyCustomTransitionPage(
+      //             key: state.pageKey,
+      //             name: Routes.newPage.name,
+      //             child: MyHomePage(
+      //               title: 'Sub',
+      //               color: Colors.pink,
+      //               onPressedButton: () => TreeNavigation.navigator
+      //                   .goNamed(Routes.newPage2)
+      //                   .then((result) => print('Page Sub Result is : $result')),
+      //               hasPopButton: true,
+      //             ),
+      //             transitionsBuilder: (_, animation, ___, widget) {
+      //               return FadeTransition(
+      //                 opacity: animation,
+      //                 child: widget,
+      //               );
+      //             },
+      //           ),
+      //           routes: [
+      //             TreeRoute(
+      //               routeInfo: Routes.newPage2,
+      //               pageWidget: MyHomePage(
+      //                 title: 'Sub2',
+      //                 color: Colors.orange,
+      //                 onPressedButton: () {
+      //                   TreeNavigation.navigator
+      //                       .openDialog(
+      //                           dialog: Dialog(
+      //                     child: Column(
+      //                       mainAxisSize: MainAxisSize.min,
+      //                       children: [
+      //                         Text('Pop Me'),
+      //                         TextButton(
+      //                           onPressed: () => TreeNavigation.navigator.pop(result: 'sub2 dialog'),
+      //                           child: Text('POP'),
+      //                         ),
+      //                       ],
+      //                     ),
+      //                   ))
+      //                       .then((value) {
+      //                     print('After dialog pop: $value');
+      //                   });
+      //                 },
+      //                 hasPopButton: true,
+      //               ),
+      //             ),
+      //           ]),
+      //     ],
+      //   ),
+      //   TreeShellRoute(
+      //     navigatorKey: shellKey,
+      //     pageWidget: (child) => MyHomePage(
+      //       title: 'Shell Route',
+      //       color: Colors.blue,
+      //       canPop: true,
+      //       child: child,
+      //     ),
+      //     routes: [
+      //       TreeRoute(
+      //         routeInfo: Routes.newPage,
+      //         pageWidget: const MyHomePage(
+      //           title: 'Sub Shell',
+      //           color: Colors.pink,
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ],
     );
   }
 }
@@ -151,12 +203,12 @@ abstract class Routes {
     isShellRoute: false,
   );
   static const RouteInfo newPage = RouteInfo(
-    path: 'newPage',
+    path: '/newPage',
     name: 'newPage',
     isShellRoute: false,
   );
   static const RouteInfo newPage2 = RouteInfo(
-    path: 'newPage2',
+    path: '/newPage2',
     name: 'newPage2',
     isShellRoute: false,
   );
@@ -242,9 +294,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => widget.onPressedButton(),
-        tooltip: 'Change Page',
+      floatingActionButton: DotButton(
+        onPressed: () async => await widget.onPressedButton(),
         child: const Icon(Icons.change_circle),
       ),
     );
