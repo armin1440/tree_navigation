@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:tree_navigation/src/navigation_two_service.dart';
 import 'package:tree_navigation/src/route_info.dart';
 
 import 'navigation_int.dart';
