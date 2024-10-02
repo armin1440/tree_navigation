@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tree_navigation/src/pop_result.dart';
 import 'package:tree_navigation/src/route_info.dart';
 
 import 'navigation_int.dart';
@@ -11,30 +10,25 @@ import 'navigation_int.dart';
 class NavigationOneService extends NavigationInterface {
   NavigationOneService({required super.routeInfoList, required super.globalKeyList});
 
-  // List<PopResult> popResultList = [];
-
   @override
   Future<dynamic> goNamed(
-      RouteInfo route, {
-        Map<String, String> pathParameters = const <String, String>{},
-        Map<String, dynamic> queryParameters = const <String, dynamic>{},
-        Object? extra,
-      }) async {
+    RouteInfo route, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) async {
     if (pendingRouteFunction != null) {
       Function copiedFunction = pendingRouteFunction!;
       pendingRouteFunction = null;
       copiedFunction();
       return null;
     } else {
-      // PopResult newResult = PopResult();
-      // popResultList.add(newResult);
       return context.pushNamed(
         route.name,
         pathParameters: pathParameters,
         extra: extra,
         queryParameters: queryParameters,
       );
-      // return await newResult.getFuture();
     }
   }
 
@@ -54,9 +48,6 @@ class NavigationOneService extends NavigationInterface {
     String popUpName = '${currentRoute?.name}$runtimeType';
     registerPopUp(name: popUpName, key: dialog.key, isDialog: true);
     String dialogNameAndKey = openedDialogOrBottomSheetList.last;
-
-    // PopResult newResult = PopResult();
-    // popResultList.add(newResult);
 
     T? output;
     output = await showDialog<T>(
@@ -101,9 +92,6 @@ class NavigationOneService extends NavigationInterface {
     registerPopUp(name: name, key: bottomSheet.key, isDialog: false);
     String bottomSheetNameAndKey = openedDialogOrBottomSheetList.last;
 
-    // PopResult newResult = PopResult();
-    // popResultList.add(newResult);
-
     T? output = await showModalBottomSheet<T>(
       context: context,
       builder: (_) => bottomSheet,
@@ -146,15 +134,8 @@ class NavigationOneService extends NavigationInterface {
   }
 
   @override
-  void pop({dynamic result}) {
-    // if (popResultList.isNotEmpty) {
-    //   PopResult popResult = popResultList.last;
-    //   if (!popResult.isCompleted) {
-    //     popResult.setValue(result);
-    //   }
-    //   popResultList.removeLast();
-    // }
-    context.pop(result);
+  Future<void> pop({dynamic result}) async {
+    await Navigator.of(context).maybePop(result);
   }
 
   @override
@@ -164,20 +145,17 @@ class NavigationOneService extends NavigationInterface {
     bool updateStack = true,
     dynamic result,
   }) async {
-    // if(result is Future){
-    //   result = await result;
-    // }
-    // _completePopResult(result: result);
     super.disposeRoute(previousRoute: previousRoute, poppedRoute: poppedRoute, updateStack: updateStack);
   }
 
-  // void _completePopResult({dynamic result}) {
-  //   if (popResultList.isNotEmpty) {
-  //     PopResult popResult = popResultList.last;
-  //     if (!popResult.isCompleted) {
-  //       popResult.setValue(result);
-  //     }
-  //     popResultList.removeLast();
-  //   }
-  // }
+  @override
+  Future<void> popUntilRoute({required bool Function(RouteInfo) verifyCondition}) async {
+    await popAllPopUps();
+    int destinationIndex = stack.lastIndexWhere((route) => verifyCondition(route));
+    if (destinationIndex < 0) return;
+    int neededPopsCount = stack.length - 1 - destinationIndex;
+    for (int i = 0; i < neededPopsCount; i++) {
+      await pop();
+    }
+  }
 }

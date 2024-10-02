@@ -108,7 +108,7 @@ abstract class NavigationInterface {
 
   void openDrawer();
 
-  void pop({dynamic result});
+  Future<void> pop({dynamic result});
 
   bool get isDialogOpen => openedDialogList.isNotEmpty;
 
@@ -138,14 +138,14 @@ abstract class NavigationInterface {
     }
   }
 
-  void popAllPopUps({dynamic result}) {
+  Future<void> popAllPopUps({dynamic result}) async {
     while (openedDialogOrBottomSheetList.isNotEmpty) {
-      _popLastDialogOrBottomSheet(result: result);
+      await _popLastDialogOrBottomSheet(result: result);
     }
   }
 
-  void _popLastDialogOrBottomSheet({dynamic result}) {
-    pop(result: result);
+  Future<void> _popLastDialogOrBottomSheet({dynamic result}) async {
+    await pop(result: result);
     String last = openedDialogOrBottomSheetList.removeLast();
     bool isBottomSheet = openedBottomSheetList.contains(last);
     if (isBottomSheet) {
@@ -155,11 +155,12 @@ abstract class NavigationInterface {
     }
   }
 
-  void popUntilRoute({required bool Function(RouteInfo) verifyCondition}) async {
+  Future<void> popUntilRoute({required bool Function(RouteInfo) verifyCondition}) async {
     popAllPopUps();
     RouteInfo? previousRoute;
     do {
       pop();
+      print('Previous is ${previousRoute?.name} and current is ${currentRoute?.name}');
       previousRoute = currentRoute;
     } while (previousRoute == null ? false : !verifyCondition(previousRoute));
   }

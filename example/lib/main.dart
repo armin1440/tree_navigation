@@ -6,9 +6,8 @@ GlobalKey<NavigatorState> topKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> shellKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  runApp(RouteProvider(
-      child: const MyApp()
-  ),
+  runApp(
+    RouteProvider(child: const MyApp()),
   );
 }
 
@@ -80,18 +79,27 @@ class _MyAppState extends State<MyApp> {
             onPressedButton: () {
               TreeNavigation.navigator
                   .openDialog(
-                  dialog: Dialog(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text('Pop Me'),
-                        TextButton(
-                          onPressed: () => TreeNavigation.navigator.pop(result: 'sub2 dialog'),
-                          child: Text('POP'),
-                        ),
-                      ],
-                    ),
-                  ))
+                dialog: Dialog(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Pop Me'),
+                      TextButton(
+                        onPressed: () => TreeNavigation.navigator.pop(result: 'sub2 dialog'),
+                        child: Text('POP'),
+                      ),
+                      TextButton(
+                        onPressed: () => TreeNavigation.navigator.popUntilRoute(verifyCondition: (r) => r.name == Routes.newPage.name),
+                        child: Text('Pop Until new page'),
+                      ),
+                      TextButton(
+                        onPressed: () => TreeNavigation.navigator.popUntilRoute(verifyCondition: (r) => r.name == Routes.home.name),
+                        child: Text('POP Until home'),
+                      ),
+                    ],
+                  ),
+                ),
+              )
                   .then((value) {
                 print('After dialog pop: $value');
               });
@@ -105,7 +113,7 @@ class _MyAppState extends State<MyApp> {
             title: 'Sub Shell',
             color: Colors.pink,
             hasPopButton: true,
-            onPressedButton: (){
+            onPressedButton: () {
               TreeNavigation.navigator.goNamed(Routes.newPage2).then((res) => print('Page New Page Result is : $res'));
             },
           ),
@@ -250,6 +258,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            BackButton(),
             if (widget.child != null) widget.child! else Text(widget.title),
             if (widget.hasPopButton)
               TextButton(

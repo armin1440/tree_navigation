@@ -1,3 +1,7 @@
+## [1.1.1] - 02.10.2024
+
+* Fixed navigation one pop
+
 ## [1.1.0] - 01.10.2024
 
 * Added navigation one
