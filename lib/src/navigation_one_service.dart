@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tree_navigation/src/pop_result.dart';
 import 'package:tree_navigation/src/route_info.dart';
 
 import 'navigation_int.dart';
@@ -13,11 +12,11 @@ class NavigationOneService extends NavigationInterface {
 
   @override
   Future<dynamic> goNamed(
-      RouteInfo route, {
-        Map<String, String> pathParameters = const <String, String>{},
-        Map<String, dynamic> queryParameters = const <String, dynamic>{},
-        Object? extra,
-      }) async {
+    RouteInfo route, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+  }) async {
     if (pendingRouteFunction != null) {
       Function copiedFunction = pendingRouteFunction!;
       pendingRouteFunction = null;
@@ -135,8 +134,8 @@ class NavigationOneService extends NavigationInterface {
   }
 
   @override
-  void pop({dynamic result}) {
-    context.pop(result);
+  Future<void> pop({dynamic result}) async {
+    await Navigator.of(context).maybePop(result);
   }
 
   @override
@@ -147,5 +146,16 @@ class NavigationOneService extends NavigationInterface {
     dynamic result,
   }) async {
     super.disposeRoute(previousRoute: previousRoute, poppedRoute: poppedRoute, updateStack: updateStack);
+  }
+
+  @override
+  Future<void> popUntilRoute({required bool Function(RouteInfo) verifyCondition}) async {
+    await popAllPopUps();
+    int destinationIndex = stack.lastIndexWhere((route) => verifyCondition(route));
+    if (destinationIndex < 0) return;
+    int neededPopsCount = stack.length - 1 - destinationIndex;
+    for (int i = 0; i < neededPopsCount; i++) {
+      await pop();
+    }
   }
 }

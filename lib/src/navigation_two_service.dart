@@ -169,7 +169,7 @@ class NavigationTwoService extends NavigationInterface {
   }
 
   @override
-  void pop({dynamic result}) {
+  Future<void> pop({dynamic result}) async {
     // if (popResultList.isNotEmpty) {
     //   PopResult popResult = popResultList.last;
     //   if (!popResult.isCompleted) {
