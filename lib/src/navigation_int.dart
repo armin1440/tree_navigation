@@ -162,7 +162,7 @@ abstract class NavigationInterface {
     RouteInfo? previousRoute;
     do {
       pop();
-      print('Previous is ${previousRoute?.name} and current is ${currentRoute?.name}');
+      debugPrint('Previous is ${previousRoute?.name} and current is ${currentRoute?.name}');
       previousRoute = currentRoute;
     } while (previousRoute == null ? false : !verifyCondition(previousRoute));
   }
