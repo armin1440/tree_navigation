@@ -249,12 +249,12 @@ class _MyAppState extends State<MyApp> {
 abstract class Routes {
   static const RouteInfo home1 = RouteInfo(
     path: '/h1',
-    // name: 'home',
+    name: 'home',
     isShellRoute: false,
   );
   static const RouteInfo home = RouteInfo(
     path: '/',
-    // name: 'home',
+    name: 'home',
     isShellRoute: false,
   );
   static const RouteInfo newPage = RouteInfo(
