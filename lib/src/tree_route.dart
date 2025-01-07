@@ -23,9 +23,9 @@ class TreeRoute extends GoRoute {
     super.routes = const <RouteBase>[],
     this.pageWidget,
   }) : super(
-    name: routeInfo.name,
+    // name: routeInfo.name,
     path: routeInfo.path,
-    pageBuilder: pageBuilder ?? (TreeNavigation.defaultPageBuilder != null ? (context, state) => TreeNavigation.defaultPageBuilder!(context, state, pageWidget!, routeInfo.name) : null),
+    pageBuilder: pageBuilder ?? (TreeNavigation.defaultPageBuilder != null ? (context, state) => TreeNavigation.defaultPageBuilder!(context, state, pageWidget!) : null),
   );
 
   TreeRoute withPageBuilder(RouteTreePageBuilder? pageBuilder) {
