@@ -13,7 +13,7 @@ typedef RouteTreeDefaultPageBuilder = Page<dynamic> Function(
   BuildContext context,
   GoRouterState state,
   Widget widget,
-  // String routeName,
+  String routeName,
 );
 typedef RouteTreeDefaultShellPageBuilder = Page<dynamic> Function(
   BuildContext context,
