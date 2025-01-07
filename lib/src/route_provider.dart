@@ -26,7 +26,10 @@ class RouteProvider extends InheritedNotifier<RouteInfoNotifier> {
   }
 
   static updateRoute({required BuildContext context, required RouteInfo? routeName}) {
-    RouteInfoNotifier.instance.updateRoute(newRoute: routeName);
+    // Future(() => );
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      RouteInfoNotifier.instance.updateRoute(newRoute: routeName);
+    });
   }
 }
 

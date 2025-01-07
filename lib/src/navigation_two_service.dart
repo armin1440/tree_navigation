@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -10,8 +12,8 @@ import 'package:tree_navigation/src/tree_route.dart';
 
 import 'navigation_int.dart';
 
-class NavigationService extends NavigationInterface {
-  NavigationService({required super.routeInfoList, required super.globalKeyList});
+class NavigationTwoService extends NavigationInterface {
+  NavigationTwoService({required super.routeInfoList, required super.globalKeyList});
 
   List<PopResult> popResultList = [];
 
@@ -167,7 +169,32 @@ class NavigationService extends NavigationInterface {
   }
 
   @override
-  RouteInfo? pop({dynamic result}) {
+  void pop({dynamic result}) {
+    // if (popResultList.isNotEmpty) {
+    //   PopResult popResult = popResultList.last;
+    //   if (!popResult.isCompleted) {
+    //     popResult.setValue(result);
+    //   }
+    //   popResultList.removeLast();
+    // }
+    context.pop(result);
+  }
+
+  @override
+  Future<void> disposeRoute({
+    required RouteInfo? previousRoute,
+    required RouteInfo poppedRoute,
+    bool updateStack = true,
+    dynamic result,
+  }) async {
+    if(result is Future){
+      result = await result;
+    }
+    _completePopResult(result: result);
+    super.disposeRoute(previousRoute: previousRoute, poppedRoute: poppedRoute, updateStack: updateStack);
+  }
+
+  void _completePopResult({dynamic result}) {
     if (popResultList.isNotEmpty) {
       PopResult popResult = popResultList.last;
       if (!popResult.isCompleted) {
@@ -175,8 +202,6 @@ class NavigationService extends NavigationInterface {
       }
       popResultList.removeLast();
     }
-    context.pop(result);
-    return previousRoute;
   }
 
   String _generatePath({required String lastPathPart, required String? parentPath}) {

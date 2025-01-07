@@ -37,7 +37,12 @@ abstract class NavigationInterface {
     _currentRoute = routeName;
   }
 
-  void disposeRoute({required RouteInfo? previousRoute, required RouteInfo poppedRoute, bool updateStack = true}) {
+  void disposeRoute({
+    required RouteInfo? previousRoute,
+    required RouteInfo poppedRoute,
+    bool updateStack = true,
+    dynamic result,
+  }) {
     registeredControllers[poppedRoute]?.onDispose();
     if (updateStack && stack.isNotEmpty) {
       stack.removeLast();
@@ -47,8 +52,8 @@ abstract class NavigationInterface {
 
   BuildContext get context {
     List<GlobalKey<NavigatorState>> reversedKeyList = globalKeyList.reversed.toList();
-    for(GlobalKey<NavigatorState> key in reversedKeyList){
-      if(key.currentContext != null || key == reversedKeyList.last) {
+    for (GlobalKey<NavigatorState> key in reversedKeyList) {
+      if (key.currentContext != null || key == reversedKeyList.last) {
         return key.currentContext!;
       }
     }
@@ -56,7 +61,8 @@ abstract class NavigationInterface {
     return reversedKeyList.last.currentContext!;
   }
 
-  Future<dynamic> goNamed(RouteInfo route, {
+  Future<dynamic> goNamed(
+    RouteInfo route, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
@@ -104,7 +110,7 @@ abstract class NavigationInterface {
 
   void openDrawer();
 
-  RouteInfo? pop({dynamic result});
+  void pop({dynamic result});
 
   bool get isDialogOpen => openedDialogList.isNotEmpty;
 
@@ -155,7 +161,8 @@ abstract class NavigationInterface {
     popAllPopUps();
     RouteInfo? previousRoute;
     do {
-      previousRoute = pop();
+      pop();
+      previousRoute = currentRoute;
     } while (previousRoute == null ? false : !verifyCondition(previousRoute));
   }
 
