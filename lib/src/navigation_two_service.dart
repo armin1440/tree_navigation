@@ -32,34 +32,28 @@ class NavigationTwoService extends NavigationInterface {
     } else {
       PopResult newResult = PopResult();
       popResultList.add(newResult);
-      // context.goNamed(
-      // route.name,
-      // pathParameters: pathParameters,
-      // extra: extra,
-      // queryParameters: queryParameters,
-      // );
       return await newResult.getFuture();
     }
   }
 
-  @override
-  Future<dynamic> go(String location, {Object? extra, String? parentPath}) async {
-    if (pendingRouteFunction != null) {
-      Function copiedFunction = pendingRouteFunction!;
-      pendingRouteFunction = null;
-      copiedFunction();
-      return null;
-    } else {
-      String path = _generatePath(lastPathPart: location, parentPath: parentPath);
-      PopResult newResult = PopResult();
-      popResultList.add(newResult);
-      context.go(
-        path,
-        extra: extra,
-      );
-      return await newResult.getFuture();
-    }
-  }
+  // @override
+  // Future<dynamic> go(String location, {Object? extra, String? parentPath}) async {
+  //   if (pendingRouteFunction != null) {
+  //     Function copiedFunction = pendingRouteFunction!;
+  //     pendingRouteFunction = null;
+  //     copiedFunction();
+  //     return null;
+  //   } else {
+  //     String path = _generatePath(lastPathPart: location, parentPath: parentPath);
+  //     PopResult newResult = PopResult();
+  //     popResultList.add(newResult);
+  //     context.go(
+  //       path,
+  //       extra: extra,
+  //     );
+  //     return await newResult.getFuture();
+  //   }
+  // }
 
   @override
   Future<T?> openDialog<T>({

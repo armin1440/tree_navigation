@@ -68,7 +68,7 @@ abstract class NavigationInterface {
     Object? extra,
   });
 
-  Future<dynamic> go(String location, {Object? extra, String? parentPath});
+  // Future<dynamic> go(String location, {Object? extra, String? parentPath});
 
   Future<T?> openDialog<T>({
     required Widget dialog,
