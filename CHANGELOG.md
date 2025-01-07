@@ -1,3 +1,7 @@
+## [1.1.2] - 07.01.2025
+
+* Upgraded dependencies
+
 ## [1.1.1] - 02.10.2024
 
 * Fixed navigation one pop

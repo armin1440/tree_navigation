@@ -207,4 +207,7 @@ class RouteTree implements GoRouter {
   void restore(RouteMatchList matchList) {
     router.restore(matchList);
   }
+
+  @override
+  GoRouterState? get state => router.state;
 }
