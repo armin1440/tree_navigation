@@ -237,6 +237,35 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: Text('My Route'),
             ),
+            TextButton(
+              onPressed: () {
+                TreeNavigation.navigator.showTextToast(text: 'text');
+              },
+              child: Text('text toast'),
+            ),
+            TextButton(
+              onPressed: () => TreeNavigation.navigator.showToast(
+                attachedBuilder: (_) => Transform.scale(
+                  scale: 0.9,
+                  child: Material(
+                    child: GestureDetector(
+                      onTap: () {
+                        TreeNavigation.navigator.removeToasts();
+                      },
+                      child: AbsorbPointer(
+                        child: Material(
+                          child: Text('yo'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                duration: Duration(seconds: (5)),
+                target: const Offset(500, 20),
+              ),
+              child: Text('Toast'),
+            ),
+
             if (widget.title == 'Home')
               TextButton(
                 onPressed: () {
