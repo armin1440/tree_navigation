@@ -10,6 +10,6 @@ export 'src/navigation_int.dart';
 export 'src/my_custom_transition_page.dart';
 export 'src/controller_int.dart';
 export 'src/tree_material_app.dart';
-
+export 'src/no_transition_page.dart';
 
 
