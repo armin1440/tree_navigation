@@ -1,3 +1,7 @@
+## [1.1.6] - 08.01.2025
+
+* Set toast background color to transparent.
+
 ## [1.1.5] - 08.01.2025
 
 * Added "showToast" and "cleanAllToasts" methods to the interface.
