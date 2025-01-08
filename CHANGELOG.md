@@ -1,3 +1,7 @@
+## [1.1.5] - 08.01.2025
+
+* Added "showToast" and "cleanAllToasts" methods to the interface.
+
 ## [1.1.4] - 08.01.2025
 
 * RouteProvider.of method will not throw "Null check operator used on a null value" exception.
