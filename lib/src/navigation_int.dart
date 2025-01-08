@@ -269,4 +269,37 @@ abstract class NavigationInterface {
     Overlay.of(passedContext ?? context, debugRequiredFor: child).insert(overlayEntry);
     return overlayEntry;
   }
+
+  CancelFunc showToast({
+    required ToastBuilder attachedBuilder,
+    BuildContext? targetContext,
+    Offset? target,
+    WrapAnimation? wrapAnimation,
+    WrapAnimation? wrapToastAnimation,
+    Color backgroundColor = Colors.white,
+    Duration? duration,
+    Duration? animationDuration,
+    Duration? animationReverseDuration,
+    PreferDirection? preferDirection,
+    VoidCallback? onClose,
+  }) {
+    CancelFunc cancelFunc = BotToast.showAttachedWidget(
+      attachedBuilder: attachedBuilder,
+      targetContext: targetContext,
+      target: target,
+      wrapAnimation: wrapAnimation,
+      wrapToastAnimation: wrapToastAnimation,
+      backgroundColor: backgroundColor,
+      duration: duration,
+      animationDuration: animationDuration,
+      animationReverseDuration: animationReverseDuration,
+      preferDirection: preferDirection,
+      onClose: onClose,
+    );
+    return cancelFunc;
+  }
+
+  void cleanAllToasts(){
+    BotToast.cleanAll();
+  }
 }
