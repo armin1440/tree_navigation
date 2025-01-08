@@ -276,7 +276,7 @@ abstract class NavigationInterface {
     Offset? target,
     WrapAnimation? wrapAnimation,
     WrapAnimation? wrapToastAnimation,
-    Color backgroundColor = Colors.white,
+    Color backgroundColor = Colors.transparent,
     Duration? duration,
     Duration? animationDuration,
     Duration? animationReverseDuration,
