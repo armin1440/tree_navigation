@@ -1,3 +1,7 @@
+## [1.1.4] - 08.01.2025
+
+* RouteProvider.of method will not throw "Null check operator used on a null value" exception.
+
 ## [1.1.3] - 08.01.2025
 
 * Exposed "NoTransitionPage" class

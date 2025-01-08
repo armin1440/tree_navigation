@@ -17,12 +17,12 @@ class RouteProvider extends InheritedNotifier<RouteInfoNotifier> {
   }
 
   static RouteInfo? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<RouteProvider>()!.notifier!.value;
+    return context.dependOnInheritedWidgetOfExactType<RouteProvider>()?.notifier?.value;
   }
 
   @override
   bool updateShouldNotify(covariant InheritedNotifier<RouteInfoNotifier> oldWidget) {
-    return notifier!.value != oldWidget.notifier!.value;
+    return notifier?.value != oldWidget.notifier?.value;
   }
 
   static updateRoute({required BuildContext context, required RouteInfo? routeName}) {
