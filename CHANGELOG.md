@@ -1,3 +1,7 @@
+## [1.1.3] - 08.01.2025
+
+* Exposed "NoTransitionPage" class
+
 ## [1.1.2] - 07.01.2025
 
 * Upgraded dependencies
