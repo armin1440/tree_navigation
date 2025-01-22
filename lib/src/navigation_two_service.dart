@@ -3,13 +3,10 @@ import 'dart:async';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:tree_navigation/src/exceptions.dart';
 import 'package:tree_navigation/src/pop_result.dart';
-import 'package:tree_navigation/src/route_info.dart';
-// import 'package:tree_navigation/src/tree_material_app.dart';
-// import 'package:tree_navigation/src/tree_route.dart';
 
-import 'navigation_int.dart';
+import '../tree_navigation.dart';
+import 'exceptions.dart';
 
 class NavigationTwoService extends NavigationInterface {
   NavigationTwoService({required super.routeInfoList, required super.globalKeyList});
@@ -22,6 +19,7 @@ class NavigationTwoService extends NavigationInterface {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
+    RouteInfo? parentPath,
   }) async {
     if (pendingRouteFunction != null) {
       Function copiedFunction = pendingRouteFunction!;
@@ -29,30 +27,40 @@ class NavigationTwoService extends NavigationInterface {
       copiedFunction();
       return null;
     } else {
+      String path = _tryGeneratingPath(lastPathPart: route.path, parentPath: parentPath?.path);
       PopResult newResult = PopResult();
       popResultList.add(newResult);
+      context.go(
+        path,
+        extra: extra,
+      );
       return await newResult.getFuture();
     }
   }
 
-  // @override
-  // Future<dynamic> go(String location, {Object? extra, String? parentPath}) async {
-  //   if (pendingRouteFunction != null) {
-  //     Function copiedFunction = pendingRouteFunction!;
-  //     pendingRouteFunction = null;
-  //     copiedFunction();
-  //     return null;
-  //   } else {
-  //     String path = _generatePath(lastPathPart: location, parentPath: parentPath);
-  //     PopResult newResult = PopResult();
-  //     popResultList.add(newResult);
-  //     context.go(
-  //       path,
-  //       extra: extra,
-  //     );
-  //     return await newResult.getFuture();
-  //   }
-  // }
+  Future<dynamic> go(
+    RouteInfo route, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+    RouteInfo? parentPath,
+  }) async {
+    if (pendingRouteFunction != null) {
+      Function copiedFunction = pendingRouteFunction!;
+      pendingRouteFunction = null;
+      copiedFunction();
+      return null;
+    } else {
+      String path = _tryGeneratingPath(lastPathPart: route.path, parentPath: parentPath?.path);
+      PopResult newResult = PopResult();
+      popResultList.add(newResult);
+      context.go(
+        path,
+        extra: extra,
+      );
+      return await newResult.getFuture();
+    }
+  }
 
   @override
   Future<T?> openDialog<T>({
@@ -66,9 +74,9 @@ class NavigationTwoService extends NavigationInterface {
     Offset? anchorPoint,
     TraversalEdgeBehavior? traversalEdgeBehavior,
   }) async {
-    // String runtimeType = dialog.runtimeType.toString();
-    // String popUpName = '${currentRoute?.name}$runtimeType';
-    registerPopUp(name: 'popUpName', key: dialog.key, isDialog: true);
+    String runtimeType = dialog.runtimeType.toString();
+    String popUpName = '${currentRoute?.name}$runtimeType';
+    registerPopUp(name: popUpName, key: dialog.key, isDialog: true);
     String dialogNameAndKey = openedDialogOrBottomSheetList.last;
 
     PopResult newResult = PopResult();
@@ -112,9 +120,9 @@ class NavigationTwoService extends NavigationInterface {
     AnimationController? transitionAnimationController,
     Offset? anchorPoint,
   }) async {
-    // String runtimeType = bottomSheet.runtimeType.toString();
-    // String name = '${currentRoute?.name}$runtimeType';
-    registerPopUp(name: 'name', key: bottomSheet.key, isDialog: false);
+    String runtimeType = bottomSheet.runtimeType.toString();
+    String name = '${currentRoute?.name}$runtimeType';
+    registerPopUp(name: name, key: bottomSheet.key, isDialog: false);
     String bottomSheetNameAndKey = openedDialogOrBottomSheetList.last;
 
     PopResult newResult = PopResult();
@@ -180,7 +188,7 @@ class NavigationTwoService extends NavigationInterface {
     bool updateStack = true,
     dynamic result,
   }) async {
-    if(result is Future){
+    if (result is Future) {
       result = await result;
     }
     _completePopResult(result: result);
@@ -197,58 +205,59 @@ class NavigationTwoService extends NavigationInterface {
     }
   }
 
-  // String _generatePath({required String lastPathPart, required String? parentPath}) {
-  //   String path = '';
-  //   if (TreeNavigation.routeTree != null) {
-  //     String? finalPath = _generateFullPath(lastPathPart: lastPathPart, parentPath: parentPath);
-  //     if (finalPath == null) {
-  //       throw RouteNotFoundException(lastPathPart);
-  //     } else {
-  //       path = finalPath;
-  //     }
-  //   }
-  //   return path;
-  // }
+  String _tryGeneratingPath({required String lastPathPart, required String? parentPath}) {
+    String path = '';
+    if (TreeNavigation.routeTree != null) {
+      String? finalPath = _generateFullPath(lastPathPart: lastPathPart, parentPath: parentPath);
+      if (finalPath == null) {
+        throw RouteNotFoundException(lastPathPart);
+      } else {
+        path = finalPath;
+      }
+      print('Generated Path: $path');
+    }
+    return path;
+  }
 
-  // String? _generateFullPath({
-  //   required String lastPathPart,
-  //   String? parentPath,
-  //   String pathToHere = '',
-  //   RouteBase? root,
-  // }) {
-  //   List<RouteBase> routes = TreeNavigation.routeTree ?? [];
-  //   String? output;
-  //   for (var route in (root?.routes ?? routes)) {
-  //     String trimmedTmpPath = route is TreeRoute ? route.path.replaceAll('/', '') : '';
-  //     String trimmedLastPathPart = lastPathPart.replaceAll('/', '');
-  //     if (trimmedTmpPath == trimmedLastPathPart) {
-  //       String fullPath = '$pathToHere/$trimmedTmpPath';
-  //       List<String> pathParts = fullPath.split('/');
-  //       if (parentPath != null) {
-  //         String trimmedParent = parentPath.replaceAll('/', '');
-  //         if (pathParts.contains(trimmedParent)) {
-  //           output = fullPath;
-  //           break;
-  //         }
-  //       } else {
-  //         output = fullPath;
-  //         break;
-  //       }
-  //     }
-  //     bool hasChildren = route.routes.isNotEmpty;
-  //     if (hasChildren) {
-  //       output = _generateFullPath(
-  //         lastPathPart: lastPathPart,
-  //         parentPath: parentPath,
-  //         pathToHere: '$pathToHere${trimmedTmpPath.isNotEmpty ? '/' : ''}$trimmedTmpPath',
-  //         root: route,
-  //       );
-  //       if (output != null) {
-  //         break;
-  //       }
-  //     }
-  //   }
-  //
-  //   return output;
-  // }
+  String? _generateFullPath({
+    required String lastPathPart,
+    String? parentPath,
+    String pathToHere = '',
+    RouteBase? root,
+  }) {
+    List<RouteBase> routes = TreeNavigation.routeTree ?? [];
+    String? output;
+    for (var route in (root?.routes ?? routes)) {
+      String trimmedTmpPath = route is TreeRoute ? route.path.replaceAll('/', '') : '';
+      String trimmedLastPathPart = lastPathPart.replaceAll('/', '');
+      if (trimmedTmpPath == trimmedLastPathPart) {
+        String fullPath = '$pathToHere/$trimmedTmpPath';
+        List<String> pathParts = fullPath.split('/');
+        if (parentPath != null) {
+          String trimmedParent = parentPath.replaceAll('/', '');
+          if (pathParts.contains(trimmedParent)) {
+            output = fullPath;
+            break;
+          }
+        } else {
+          output = fullPath;
+          break;
+        }
+      }
+      bool hasChildren = route.routes.isNotEmpty;
+      if (hasChildren) {
+        output = _generateFullPath(
+          lastPathPart: lastPathPart,
+          parentPath: parentPath,
+          pathToHere: '$pathToHere${trimmedTmpPath.isNotEmpty ? '/' : ''}$trimmedTmpPath',
+          root: route,
+        );
+        if (output != null) {
+          break;
+        }
+      }
+    }
+
+    return output;
+  }
 }

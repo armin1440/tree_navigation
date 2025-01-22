@@ -158,4 +158,14 @@ class NavigationOneService extends NavigationInterface {
       await pop();
     }
   }
+
+  Future go(
+    RouteInfo route, {
+    Map<String, String> pathParameters = const <String, String>{},
+    Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    Object? extra,
+    RouteInfo? parentPath,
+  }) {
+    throw UnimplementedError();
+  }
 }

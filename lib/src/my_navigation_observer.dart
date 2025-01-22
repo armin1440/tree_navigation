@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:tree_navigation/src/route_info.dart';
 
+import '../tree_navigation.dart';
 import 'navigation_int.dart';
 
 class MyNavigationObserver extends NavigatorObserver {
@@ -21,16 +22,16 @@ class MyNavigationObserver extends NavigatorObserver {
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    RouteInfo? routeName = _findRouteByName(routeName: route.settings.name ?? '');
+    RouteInfo? routeInfo = _findRouteByName(routeName: route.settings.name ?? '');
     RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
     NavigationInterface navigation = GetIt.instance<NavigationInterface>();
-    if (routeName != null) {
+    if (routeInfo != null) {
       navigation.previousRoute = previousRouteInfo;
       navigation.initializeRoute(
-        routeName,
-        addToStack: !routeName.isShellRoute,
+        routeInfo,
+        addToStack: !routeInfo.isShellRoute,
       );
-      log('Pushing to ${routeName.name} from ${previousRoute?.settings.name}');
+      log('Pushing to ${'routeInfo.name'} from ${previousRoute?.settings.name}');
     }
   }
 
@@ -41,8 +42,12 @@ class MyNavigationObserver extends NavigatorObserver {
       NavigationInterface navigation = GetIt.instance<NavigationInterface>();
       RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
       navigation.previousRoute = previousRouteInfo;
-      navigation.disposeRoute(previousRoute: previousRouteInfo, poppedRoute: routeName, result: route.popped);
-      log('Popping to ${previousRoute?.settings.name} from ${routeName.name}');
+      navigation.disposeRoute(
+        previousRoute: previousRouteInfo,
+        poppedRoute: routeName,
+        result: route.popped,
+      );
+      // log('Popping to ${previousRoute?.settings.name} from ${routeName.name}');
     }
   }
 
@@ -51,7 +56,6 @@ class MyNavigationObserver extends NavigatorObserver {
     RouteInfo? routeName = _findRouteByName(routeName: route.settings.name ?? '');
 
     if (routeName != null) {
-
       NavigationInterface navigation = GetIt.instance<NavigationInterface>();
       RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
       if (routeName.isShellRoute) {
@@ -69,7 +73,7 @@ class MyNavigationObserver extends NavigatorObserver {
         poppedRoute: routeName,
         updateStack: !routeName.isShellRoute,
       );
-      log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
+      log('Removing ${'routeName.name'}, previous is ${previousRoute?.settings.name}');
     }
   }
 

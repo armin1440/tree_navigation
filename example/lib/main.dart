@@ -1,4 +1,3 @@
-import 'package:example/DotButton.dart';
 import 'package:flutter/material.dart';
 import 'package:tree_navigation/tree_navigation.dart';
 
@@ -23,7 +22,7 @@ class _MyAppState extends State<MyApp> {
   initState() {
     super.initState();
     TreeNavigation.init(
-      useNavigationOne: true,
+      useNavigationOne: false,
       globalKeyList: [topKey, shellKey],
       routeInfoList: Routes.allRoutes,
       routeTreeDefaultPageBuilder: (_, state, child, routeName) => MyCustomTransitionPage(
@@ -63,102 +62,34 @@ class _MyAppState extends State<MyApp> {
       routeInfoList: Routes.allRoutes,
       routes: [
         TreeRoute(
-          routeInfo: Routes.home1,
-          pageWidget: MyHomePage(
-            title: 'Home1',
-            color: Colors.indigo,
-            onPressedButton: () => TreeNavigation.navigator.goNamed(Routes.newPage2).then(
-                  (res) => print('Page1 Home Result is : $res'),
-                ),
-          ),
+          routeInfo: Routes.pageD,
+          pageWidget: const PageD(),
+        ),
+        TreeRoute(
+          routeInfo: Routes.pageB,
+          pageWidget: const PageB(),
           routes: [
             TreeRoute(
-              routeInfo: Routes.newPage2,
-              pageWidget: MyHomePage(
-                title: 'Sub2',
-                color: Colors.orange,
-                onPressedButton: () {
-                  TreeNavigation.navigator
-                      .openDialog(
-                    dialog: Dialog(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text('Pop Me'),
-                          TextButton(
-                            onPressed: () => TreeNavigation.navigator.pop(result: 'sub2 dialog'),
-                            child: Text('POP'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                      .then(
-                    (value) {
-                      print('After dialog pop: $value');
-                    },
-                  );
-                },
-                hasPopButton: true,
-              ),
-            )
+              routeInfo: Routes.pageD,
+              pageWidget: const PageD(),
+            ),
           ],
         ),
         TreeRoute(
-          routeInfo: Routes.home,
-          pageWidget: MyHomePage(
-            title: 'Home',
-            color: Colors.white,
-            onPressedButton: () async =>
-                TreeNavigation.navigator.goNamed(Routes.newPage).then((res) => print('Page Home Result is : $res')),
-          ),
-        ),
-        // TreeRoute(
-        //   routeInfo: Routes.newPage2,
-        //   pageWidget: MyHomePage(
-        //     title: 'Sub2',
-        //     color: Colors.orange,
-        //     onPressedButton: () {
-        //       TreeNavigation.navigator
-        //           .openDialog(
-        //         dialog: Dialog(
-        //           child: Column(
-        //             mainAxisSize: MainAxisSize.min,
-        //             children: [
-        //               Text('Pop Me'),
-        //               TextButton(
-        //                 onPressed: () => TreeNavigation.navigator.pop(result: 'sub2 dialog'),
-        //                 child: Text('POP'),
-        //               ),
-        //               TextButton(
-        //                 onPressed: () => TreeNavigation.navigator.popUntilRoute(verifyCondition: (r) => r.name == Routes.newPage.name),
-        //                 child: Text('Pop Until new page'),
-        //               ),
-        //               TextButton(
-        //                 onPressed: () => TreeNavigation.navigator.popUntilRoute(verifyCondition: (r) => r.name == Routes.home.name),
-        //                 child: Text('POP Until home'),
-        //               ),
-        //             ],
-        //           ),
-        //         ),
-        //       )
-        //           .then((value) {
-        //         print('After dialog pop: $value');
-        //       });
-        //     },
-        //     hasPopButton: true,
-        //   ),
-        // ),
-        TreeRoute(
-          routeInfo: Routes.newPage,
-          pageWidget: MyHomePage(
-            title: 'Sub Shell',
-            color: Colors.pink,
-            hasPopButton: true,
-            onPressedButton: () {
-              TreeNavigation.navigator.goNamed(Routes.newPage2).then((res) => print('Page New Page Result is : $res'));
-            },
-          ),
+          routeInfo: Routes.pageA,
+          pageWidget: const PageA(),
+          routes: [
+            TreeRoute(
+              routeInfo: Routes.pageC,
+              pageWidget: const PageC(),
+              routes: [
+                TreeRoute(
+                  routeInfo: Routes.pageD,
+                  pageWidget: const PageD(),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
@@ -166,141 +97,161 @@ class _MyAppState extends State<MyApp> {
 }
 
 abstract class Routes {
-  static const RouteInfo home1 = RouteInfo(
-    path: '/h1',
-    name: 'home1',
+  static const RouteInfo pageB = RouteInfo(
+    path: '/b',
+    name: 'B',
     isShellRoute: false,
   );
-  static const RouteInfo home = RouteInfo(
+  static const RouteInfo pageA = RouteInfo(
     path: '/',
-    name: 'home',
+    name: 'A',
     isShellRoute: false,
   );
-  static const RouteInfo newPage = RouteInfo(
-    path: '/newPage',
-    name: 'newPage',
+  static const RouteInfo pageC = RouteInfo(
+    path: '/c',
+    name: 'C',
     isShellRoute: false,
   );
-  static const RouteInfo newPage2 = RouteInfo(
-    path: '/newPage2',
-    name: 'newPage2',
+  static const RouteInfo pageD = RouteInfo(
+    path: '/d',
+    name: 'D',
     isShellRoute: false,
   );
 
-  static const List<RouteInfo> allRoutes = [home1, home, newPage, newPage2];
+  static const List<RouteInfo> allRoutes = [pageB, pageA, pageC, pageD];
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({
-    super.key,
-    required this.title,
-    this.child,
-    required this.color,
-    required this.onPressedButton,
-    this.hasPopButton = false,
-  });
+class PageA extends StatelessWidget {
+  const PageA({super.key});
 
-  final String title;
-  final Widget? child;
-  final Color color;
-  final Function onPressedButton;
-  final bool hasPopButton;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      backgroundColor: widget.color,
-      body: Padding(
-        padding: const EdgeInsets.all(100),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            BackButton(),
-            if (widget.child != null) widget.child! else Text(widget.title),
-            if (widget.hasPopButton)
-              TextButton(
-                onPressed: () => TreeNavigation.navigator.pop(result: widget.title),
-                child: const Text('Pop'),
+      appBar: AppBar(title: const Text('Page A')),
+      body: const SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GoButton(route: Routes.pageB),
+              GoButton(route: Routes.pageC),
+              GoButton(route: Routes.pageD),
+              GoButton(
+                route: Routes.pageD,
+                parent: Routes.pageC,
               ),
-            TextButton(
-              onPressed: () {
-                // print(RouteProvider.of(context)?.name);
-              },
-              child: Text('My Route'),
-            ),
-            TextButton(
-              onPressed: () {
-                TreeNavigation.navigator.showTextToast(text: 'text');
-              },
-              child: Text('text toast'),
-            ),
-            TextButton(
-              onPressed: () => TreeNavigation.navigator.showToast(
-                attachedBuilder: (_) => Transform.scale(
-                  scale: 0.9,
-                  child: Material(
-                    child: GestureDetector(
-                      onTap: () {
-                        TreeNavigation.navigator.removeToasts();
-                      },
-                      child: AbsorbPointer(
-                        child: Material(
-                          child: Text('yo'),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                duration: Duration(seconds: (5)),
-                target: const Offset(500, 20),
+              GoButton(
+                route: Routes.pageD,
+                parent: Routes.pageB,
               ),
-              child: Text('Toast'),
-            ),
-
-            if (widget.title == 'Home')
-              TextButton(
-                onPressed: () {
-                  TreeNavigation.navigator
-                      .openDialog(
-                          dialog: Dialog(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('Pop Me'),
-                            TextButton(
-                              onPressed: () => TreeNavigation.navigator.pop(result: 'home dialog'),
-                              child: Text('POP'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                TreeNavigation.navigator
-                                    .goNamed(Routes.newPage)
-                                    .then((v) => print('In home dialog, sub pop result is: $v'));
-                              },
-                              child: Text('To Sub'),
-                            ),
-                          ],
-                        ),
-                      ))
-                      .then((value) => print('dialog result: $value'));
-                },
-                child: Text('Dialog'),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
-      floatingActionButton: DotButton(
-        onPressed: () async => await widget.onPressedButton(),
-        child: const Icon(Icons.change_circle),
+    );
+  }
+}
+
+class PageB extends StatelessWidget {
+  const PageB({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Page B')),
+      body: const SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              GoButton(route: Routes.pageA),
+              GoButton(route: Routes.pageD),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PageC extends StatelessWidget {
+  const PageC({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Page C')),
+      body: const SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              PopButton(),
+              GoButton(
+                route: Routes.pageD,
+                parent: Routes.pageC,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PageD extends StatelessWidget {
+  const PageD({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Page D')),
+      body: const SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              PopButton(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class GoButton extends StatelessWidget {
+  const GoButton({super.key, required this.route, this.parent});
+
+  final RouteInfo route;
+  final RouteInfo? parent;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => TreeNavigation.navigator.goNamed(route, parentPath: parent),
+      child: Text(
+        'To ${parent?.path ?? ''}${route.path}',
+        style: const TextStyle(fontSize: 18),
+      ),
+    );
+  }
+}
+
+class PopButton extends StatelessWidget {
+  const PopButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => TreeNavigation.navigator.pop(),
+      child: const Text(
+        'Pop',
+        style: TextStyle(fontSize: 18),
       ),
     );
   }

@@ -66,9 +66,16 @@ abstract class NavigationInterface {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
+    RouteInfo? parentPath,
   });
 
-  // Future<dynamic> go(String location, {Object? extra, String? parentPath});
+  // Future<dynamic> go(
+  //   RouteInfo route, {
+  //   Map<String, String> pathParameters = const <String, String>{},
+  //   Map<String, dynamic> queryParameters = const <String, dynamic>{},
+  //   Object? extra,
+  //   RouteInfo? parentPath,
+  // });
 
   Future<T?> openDialog<T>({
     required Widget dialog,
@@ -162,7 +169,7 @@ abstract class NavigationInterface {
     RouteInfo? previousRoute;
     do {
       pop();
-      debugPrint('Previous is ${previousRoute?.name} and current is ${currentRoute?.name}');
+      debugPrint('Previous is ${previousRoute?.name} and current is ${'currentRoute?.name'}');
       previousRoute = currentRoute;
     } while (previousRoute == null ? false : !verifyCondition(previousRoute));
   }
@@ -299,7 +306,7 @@ abstract class NavigationInterface {
     return cancelFunc;
   }
 
-  void cleanAllToasts(){
+  void cleanAllToasts() {
     BotToast.cleanAll();
   }
 }
