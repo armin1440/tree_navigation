@@ -42,7 +42,7 @@ class MyNavigationObserver extends NavigatorObserver {
       NavigationInterface navigation = GetIt.instance<NavigationInterface>();
       RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
       navigation.previousRoute = previousRouteInfo;
-      navigation.popRoute(
+      navigation.onPoppedRoute(
         previousRoute: previousRouteInfo,
         poppedRoute: routeName,
         result: route.popped,
@@ -68,10 +68,10 @@ class MyNavigationObserver extends NavigatorObserver {
       }
       navigation.previousRoute = previousRouteInfo;
 
-      navigation.removeRoute(
+      navigation.onRemovedRoute(
         previousRoute: previousRouteInfo,
         poppedRoute: routeName,
-        updateStack: !routeName.isShellRoute,
+        // updateStack: !routeName.isShellRoute,
       );
       log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
     }

@@ -178,7 +178,25 @@ class NavigationTwoService extends NavigationInterface {
     //   }
     //   popResultList.removeLast();
     // }
-    context.pop(result);
+
+    // context.pop(result);
+
+    if (stack.isNotEmpty) {
+      int routeBeforeLastIndex = stack.length - 2;
+      RouteInfo? previousRoute = routeBeforeLastIndex < 0 ? null : stack[routeBeforeLastIndex];
+      if (previousRoute != null) {
+        go(previousRoute);
+        disposeRoute(
+          previousRoute: previousRoute,
+          poppedRoute: stack.last,
+          result: result,
+          updateStack: true,
+        );
+      }
+    }
+    else{
+      throw GoError('There is nothing to pop');
+    }
   }
 
   Future<void> _preparePopResult({dynamic result}) async {
@@ -189,14 +207,14 @@ class NavigationTwoService extends NavigationInterface {
   }
 
   @override
-  Future<void> popRoute({
+  Future<void> onPoppedRoute({
     required RouteInfo? previousRoute,
     required RouteInfo poppedRoute,
     bool updateStack = true,
     dynamic result,
   }) async {
     await _preparePopResult(result: result);
-    super.popRoute(
+    super.onPoppedRoute(
       previousRoute: previousRoute,
       poppedRoute: poppedRoute,
       updateStack: updateStack,
@@ -204,17 +222,17 @@ class NavigationTwoService extends NavigationInterface {
   }
 
   @override
-  Future<void> removeRoute({
+  Future<void> onRemovedRoute({
     required RouteInfo? previousRoute,
     required RouteInfo poppedRoute,
     bool updateStack = true,
     dynamic result,
   }) async {
     await _preparePopResult(result: result);
-    super.removeRoute(
+    super.onRemovedRoute(
       previousRoute: previousRoute,
       poppedRoute: poppedRoute,
-      updateStack: updateStack,
+      // updateStack: updateStack,
     );
   }
 

@@ -140,13 +140,13 @@ class NavigationOneService extends NavigationInterface {
   }
 
   @override
-  Future<void> popRoute({
+  Future<void> onPoppedRoute({
     required RouteInfo? previousRoute,
     required RouteInfo poppedRoute,
     bool updateStack = true,
     dynamic result,
   }) async {
-    super.popRoute(
+    super.onPoppedRoute(
       previousRoute: previousRoute,
       poppedRoute: poppedRoute,
       updateStack: updateStack,
@@ -154,16 +154,15 @@ class NavigationOneService extends NavigationInterface {
   }
 
   @override
-  Future<void> removeRoute({
+  Future<void> onRemovedRoute({
     required RouteInfo? previousRoute,
     required RouteInfo poppedRoute,
     bool updateStack = true,
     dynamic result,
   }) async {
-    super.removeRoute(
+    super.onRemovedRoute(
       previousRoute: previousRoute,
       poppedRoute: poppedRoute,
-      updateStack: updateStack,
     );
   }
 

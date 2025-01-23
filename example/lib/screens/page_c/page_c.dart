@@ -4,6 +4,7 @@ import '../../main.dart';
 import '../../widgets/go_button.dart';
 import '../../widgets/page_name_button.dart';
 import '../../widgets/pop_button.dart';
+import '../../widgets/stack_button.dart';
 
 class PageC extends StatelessWidget {
   const PageC({super.key});
@@ -24,6 +25,7 @@ class PageC extends StatelessWidget {
                 parent: Routes.pageC,
               ),
               PageNameButton(),
+              StackButton(),
             ],
           ),
         ),

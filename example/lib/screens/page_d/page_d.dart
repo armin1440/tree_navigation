@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/page_name_button.dart';
 import '../../widgets/pop_button.dart';
+import '../../widgets/stack_button.dart';
 
 class PageD extends StatelessWidget {
   const PageD({super.key});
@@ -18,6 +19,7 @@ class PageD extends StatelessWidget {
             children: [
               PopButton(),
               PageNameButton(),
+              StackButton(),
             ],
           ),
         ),

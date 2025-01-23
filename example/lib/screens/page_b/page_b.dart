@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../../widgets/go_button.dart';
 import '../../widgets/page_name_button.dart';
+import '../../widgets/stack_button.dart';
 
 class PageB extends StatelessWidget {
   const PageB({super.key});
@@ -20,6 +21,7 @@ class PageB extends StatelessWidget {
               GoButton(route: Routes.pageA),
               GoButton(route: Routes.pageD),
               PageNameButton(),
+              StackButton(),
             ],
           ),
         ),
