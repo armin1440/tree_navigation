@@ -37,7 +37,36 @@ abstract class NavigationInterface {
     _currentRoute = routeName;
   }
 
-  void disposeRoute({
+  void popRoute({
+    required RouteInfo? previousRoute,
+    required RouteInfo poppedRoute,
+    bool updateStack = true,
+    dynamic result,
+  }) {
+    _disposeRoute(
+      previousRoute: previousRoute,
+      poppedRoute: poppedRoute,
+      updateStack: updateStack,
+      result: result,
+    );
+    _currentRoute = previousRoute;
+  }
+
+  void removeRoute({
+    required RouteInfo? previousRoute,
+    required RouteInfo poppedRoute,
+    bool updateStack = true,
+    dynamic result,
+  }) {
+    _disposeRoute(
+      previousRoute: previousRoute,
+      poppedRoute: poppedRoute,
+      updateStack: updateStack,
+      result: result,
+    );
+  }
+
+  void _disposeRoute({
     required RouteInfo? previousRoute,
     required RouteInfo poppedRoute,
     bool updateStack = true,
@@ -47,7 +76,6 @@ abstract class NavigationInterface {
     if (updateStack && stack.isNotEmpty) {
       stack.removeLast();
     }
-    _currentRoute = previousRoute;
   }
 
   BuildContext get context {

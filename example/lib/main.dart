@@ -1,56 +1,35 @@
+import 'package:example/initialize.dart';
+import 'package:example/screens/page_a/page_a.dart';
+import 'package:example/screens/page_b/page_b.dart';
+import 'package:example/screens/page_c/page_c.dart';
+import 'package:example/screens/page_d/page_d.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tree_navigation/tree_navigation.dart';
 
 GlobalKey<NavigatorState> topKey = GlobalKey<NavigatorState>();
 
-void main() async {
+void main() {
+  init();
   runApp(
     RouteProvider(child: const MyApp()),
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
   @override
   initState() {
     super.initState();
-    TreeNavigation.init(
-      useNavigationOne: false,
-      globalKeyList: [topKey],
-      routeInfoList: Routes.allRoutes,
-      routeTreeDefaultPageBuilder: (_, state, child, routeName) => MyCustomTransitionPage(
-        key: state.pageKey,
-        child: child,
-        name: routeName,
-        transitionsBuilder: (_, animation, ___, widget) {
-          return FadeTransition(
-            opacity: animation,
-            child: widget,
-          );
-        },
-      ),
-      routeTreeDefaultShellPageBuilder: (_, state, parent, child) => MyCustomTransitionPage(
-        key: state.pageKey,
-        child: parent(child),
-        transitionsBuilder: (_, animation, ___, widget) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          final tween = Tween(begin: begin, end: end);
-          final offsetAnimation = animation.drive(tween);
-
-          return SlideTransition(
-            position: offsetAnimation,
-            child: widget,
-          );
-        },
-      ),
-    );
+    GetIt.instance.registerSingleton(ref);
+    initControllers();
   }
 
   @override
@@ -104,161 +83,4 @@ abstract class Routes {
   );
 
   static const List<RouteInfo> allRoutes = [pageB, pageA, pageC, pageD];
-}
-
-class PageA extends StatelessWidget {
-  const PageA({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Page A')),
-      body: const SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GoButton(route: Routes.pageB),
-              GoButton(route: Routes.pageC),
-              GoButton(route: Routes.pageD),
-              GoButton(
-                route: Routes.pageD,
-                parent: Routes.pageC,
-              ),
-              GoButton(
-                route: Routes.pageD,
-                parent: Routes.pageB,
-              ),
-              PageNameButton(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PageB extends StatelessWidget {
-  const PageB({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Page B')),
-      body: const SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GoButton(route: Routes.pageA),
-              GoButton(route: Routes.pageD),
-              PageNameButton(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PageC extends StatelessWidget {
-  const PageC({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Page C')),
-      body: const SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              PopButton(),
-              GoButton(
-                route: Routes.pageD,
-                parent: Routes.pageC,
-              ),
-              PageNameButton(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PageD extends StatelessWidget {
-  const PageD({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Page D')),
-      body: const SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              PopButton(),
-              PageNameButton(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class GoButton extends StatelessWidget {
-  const GoButton({super.key, required this.route, this.parent});
-
-  final RouteInfo route;
-  final RouteInfo? parent;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => TreeNavigation.navigator.goNamed(route, parentPath: parent),
-      child: Text(
-        'To ${parent?.path ?? ''}${route.path}',
-        style: const TextStyle(fontSize: 18),
-      ),
-    );
-  }
-}
-
-class PopButton extends StatelessWidget {
-  const PopButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => TreeNavigation.navigator.pop(),
-      child: const Text(
-        'Pop',
-        style: TextStyle(fontSize: 18),
-      ),
-    );
-  }
-}
-
-class PageNameButton extends StatelessWidget {
-  const PageNameButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    String currentPageName = RouteProvider.of(context)?.name ?? 'Unknown';
-
-    return TextButton(
-      onPressed: () => TreeNavigation.navigator.showTextToast(text: 'I am page "$currentPageName"'),
-      child: const Text(
-        'Introduce Me',
-        style: TextStyle(fontSize: 18),
-      ),
-    );
-  }
 }

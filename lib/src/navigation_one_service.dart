@@ -140,13 +140,31 @@ class NavigationOneService extends NavigationInterface {
   }
 
   @override
-  Future<void> disposeRoute({
+  Future<void> popRoute({
     required RouteInfo? previousRoute,
     required RouteInfo poppedRoute,
     bool updateStack = true,
     dynamic result,
   }) async {
-    super.disposeRoute(previousRoute: previousRoute, poppedRoute: poppedRoute, updateStack: updateStack);
+    super.popRoute(
+      previousRoute: previousRoute,
+      poppedRoute: poppedRoute,
+      updateStack: updateStack,
+    );
+  }
+
+  @override
+  Future<void> removeRoute({
+    required RouteInfo? previousRoute,
+    required RouteInfo poppedRoute,
+    bool updateStack = true,
+    dynamic result,
+  }) async {
+    super.removeRoute(
+      previousRoute: previousRoute,
+      poppedRoute: poppedRoute,
+      updateStack: updateStack,
+    );
   }
 
   @override

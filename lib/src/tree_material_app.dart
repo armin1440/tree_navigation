@@ -133,7 +133,7 @@ abstract class TreeNavigation {
       initialLocation: initialLocation,
       overridePlatformDefaultLocation: overridePlatformDefaultLocation,
       initialExtra: initialExtra,
-      observers: [...?observers, BotToastNavigatorObserver(),],
+      observers: observers,
       debugLogDiagnostics: debugLogDiagnostics,
       navigatorKey: navigatorKey,
       restorationScopeId: routerRestorationScopeId,

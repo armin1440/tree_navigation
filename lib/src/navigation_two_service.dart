@@ -181,18 +181,41 @@ class NavigationTwoService extends NavigationInterface {
     context.pop(result);
   }
 
+  Future<void> _preparePopResult({dynamic result}) async {
+    if (result is Future) {
+      result = await result;
+    }
+    _completePopResult(result: result);
+  }
+
   @override
-  Future<void> disposeRoute({
+  Future<void> popRoute({
     required RouteInfo? previousRoute,
     required RouteInfo poppedRoute,
     bool updateStack = true,
     dynamic result,
   }) async {
-    if (result is Future) {
-      result = await result;
-    }
-    _completePopResult(result: result);
-    super.disposeRoute(previousRoute: previousRoute, poppedRoute: poppedRoute, updateStack: updateStack);
+    await _preparePopResult(result: result);
+    super.popRoute(
+      previousRoute: previousRoute,
+      poppedRoute: poppedRoute,
+      updateStack: updateStack,
+    );
+  }
+
+  @override
+  Future<void> removeRoute({
+    required RouteInfo? previousRoute,
+    required RouteInfo poppedRoute,
+    bool updateStack = true,
+    dynamic result,
+  }) async {
+    await _preparePopResult(result: result);
+    super.removeRoute(
+      previousRoute: previousRoute,
+      poppedRoute: poppedRoute,
+      updateStack: updateStack,
+    );
   }
 
   void _completePopResult({dynamic result}) {

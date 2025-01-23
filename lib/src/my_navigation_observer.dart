@@ -31,7 +31,7 @@ class MyNavigationObserver extends NavigatorObserver {
         routeInfo,
         addToStack: !routeInfo.isShellRoute,
       );
-      log('Pushing to ${'routeInfo.name'} from ${previousRoute?.settings.name}');
+      log('Pushing to ${routeInfo.name} from ${previousRoute?.settings.name}');
     }
   }
 
@@ -42,12 +42,12 @@ class MyNavigationObserver extends NavigatorObserver {
       NavigationInterface navigation = GetIt.instance<NavigationInterface>();
       RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
       navigation.previousRoute = previousRouteInfo;
-      navigation.disposeRoute(
+      navigation.popRoute(
         previousRoute: previousRouteInfo,
         poppedRoute: routeName,
         result: route.popped,
       );
-      // log('Popping to ${previousRoute?.settings.name} from ${routeName.name}');
+      log('Popping to ${previousRoute?.settings.name} from ${routeName.name}');
     }
   }
 
@@ -68,12 +68,12 @@ class MyNavigationObserver extends NavigatorObserver {
       }
       navigation.previousRoute = previousRouteInfo;
 
-      navigation.disposeRoute(
+      navigation.removeRoute(
         previousRoute: previousRouteInfo,
         poppedRoute: routeName,
         updateStack: !routeName.isShellRoute,
       );
-      log('Removing ${'routeName.name'}, previous is ${previousRoute?.settings.name}');
+      log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
     }
   }
 

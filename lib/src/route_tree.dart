@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tree_navigation/src/route_info.dart';
@@ -62,7 +63,7 @@ class RouteTree implements GoRouter {
       initialLocation: initialLocation,
       overridePlatformDefaultLocation: overridePlatformDefaultLocation,
       initialExtra: initialExtra,
-      observers: [MyNavigationObserver(routeInfoList), ...(observers ?? [])],
+      observers: [MyNavigationObserver(routeInfoList), BotToastNavigatorObserver(), ...(observers ?? [])],
       debugLogDiagnostics: debugLogDiagnostics,
       navigatorKey: navigatorKey,
       restorationScopeId: restorationScopeId,
