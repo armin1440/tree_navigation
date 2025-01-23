@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tree_navigation/tree_navigation.dart';
 
 GlobalKey<NavigatorState> topKey = GlobalKey<NavigatorState>();
-GlobalKey<NavigatorState> shellKey = GlobalKey<NavigatorState>();
 
 void main() async {
   runApp(
@@ -23,7 +22,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     TreeNavigation.init(
       useNavigationOne: false,
-      globalKeyList: [topKey, shellKey],
+      globalKeyList: [topKey],
       routeInfoList: Routes.allRoutes,
       routeTreeDefaultPageBuilder: (_, state, child, routeName) => MyCustomTransitionPage(
         key: state.pageKey,
@@ -58,38 +57,24 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return TreeNavigation.makeMaterialApp(
       navigatorKey: topKey,
-      globalKeyList: [topKey, shellKey],
+      globalKeyList: [topKey],
       routeInfoList: Routes.allRoutes,
       routes: [
         TreeRoute(
-          routeInfo: Routes.pageD,
-          pageWidget: const PageD(),
+          routeInfo: Routes.pageA,
+          pageWidget: const PageA(),
         ),
         TreeRoute(
           routeInfo: Routes.pageB,
           pageWidget: const PageB(),
-          routes: [
-            TreeRoute(
-              routeInfo: Routes.pageD,
-              pageWidget: const PageD(),
-            ),
-          ],
         ),
         TreeRoute(
-          routeInfo: Routes.pageA,
-          pageWidget: const PageA(),
-          routes: [
-            TreeRoute(
-              routeInfo: Routes.pageC,
-              pageWidget: const PageC(),
-              routes: [
-                TreeRoute(
-                  routeInfo: Routes.pageD,
-                  pageWidget: const PageD(),
-                ),
-              ],
-            ),
-          ],
+          routeInfo: Routes.pageC,
+          pageWidget: const PageC(),
+        ),
+        TreeRoute(
+          routeInfo: Routes.pageD,
+          pageWidget: const PageD(),
         ),
       ],
     );
@@ -145,6 +130,7 @@ class PageA extends StatelessWidget {
                 route: Routes.pageD,
                 parent: Routes.pageB,
               ),
+              PageNameButton(),
             ],
           ),
         ),
@@ -168,6 +154,7 @@ class PageB extends StatelessWidget {
             children: [
               GoButton(route: Routes.pageA),
               GoButton(route: Routes.pageD),
+              PageNameButton(),
             ],
           ),
         ),
@@ -194,6 +181,7 @@ class PageC extends StatelessWidget {
                 route: Routes.pageD,
                 parent: Routes.pageC,
               ),
+              PageNameButton(),
             ],
           ),
         ),
@@ -216,6 +204,7 @@ class PageD extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               PopButton(),
+              PageNameButton(),
             ],
           ),
         ),
@@ -251,6 +240,23 @@ class PopButton extends StatelessWidget {
       onPressed: () => TreeNavigation.navigator.pop(),
       child: const Text(
         'Pop',
+        style: TextStyle(fontSize: 18),
+      ),
+    );
+  }
+}
+
+class PageNameButton extends StatelessWidget {
+  const PageNameButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    String currentPageName = RouteProvider.of(context)?.name ?? 'Unknown';
+
+    return TextButton(
+      onPressed: () => TreeNavigation.navigator.showTextToast(text: 'I am page "$currentPageName"'),
+      child: const Text(
+        'Introduce Me',
         style: TextStyle(fontSize: 18),
       ),
     );
