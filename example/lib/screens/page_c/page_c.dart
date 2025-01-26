@@ -19,13 +19,13 @@ class PageC extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              PopButton(),
               GoButton(
                 route: Routes.pageD,
                 parent: Routes.pageC,
               ),
               PageNameButton(),
               StackButton(),
+              PopButton(),
             ],
           ),
         ),

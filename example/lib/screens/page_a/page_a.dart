@@ -1,3 +1,4 @@
+import 'package:example/widgets/pop_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../main.dart';
@@ -31,6 +32,7 @@ class PageA extends StatelessWidget {
               ),
               PageNameButton(),
               StackButton(),
+              PopButton(),
             ],
           ),
         ),

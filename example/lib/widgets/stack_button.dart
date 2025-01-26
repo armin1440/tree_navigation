@@ -6,10 +6,12 @@ class StackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<RouteInfo> stack = TreeNavigation.navigator.stack;
-    String stackString = stack.fold('', (value, route) => '$value,${route.name}');
     return TextButton(
-      onPressed: () => TreeNavigation.navigator.showTextToast(text: stackString),
+      onPressed: () {
+        List<RouteInfo> stack = TreeNavigation.navigator.stack;
+        String stackString = stack.fold('', (value, route) => '$value,${route.name}');
+        TreeNavigation.navigator.showTextToast(text: stackString);
+      },
       child: const Text(
         'Stack',
         style: TextStyle(fontSize: 18),

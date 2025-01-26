@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:tree_navigation/src/route_info.dart';
@@ -56,11 +58,12 @@ abstract class NavigationInterface {
     required RouteInfo? previousRoute,
     required RouteInfo poppedRoute,
     dynamic result,
+    bool updateStack = false,
   }) {
     disposeRoute(
       previousRoute: previousRoute,
       poppedRoute: poppedRoute,
-      updateStack: false,
+      updateStack: updateStack,
       result: result,
     );
   }
@@ -74,6 +77,7 @@ abstract class NavigationInterface {
     registeredControllers[poppedRoute]?.onDispose();
     if (updateStack && stack.isNotEmpty) {
       stack.removeLast();
+      // log('disposeRoute Called. Disposed ${poppedRoute.name}');
     }
   }
 

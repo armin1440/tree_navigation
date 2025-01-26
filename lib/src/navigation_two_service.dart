@@ -185,16 +185,16 @@ class NavigationTwoService extends NavigationInterface {
       int routeBeforeLastIndex = stack.length - 2;
       RouteInfo? previousRoute = routeBeforeLastIndex < 0 ? null : stack[routeBeforeLastIndex];
       if (previousRoute != null) {
-        go(previousRoute);
         disposeRoute(
           previousRoute: previousRoute,
           poppedRoute: stack.last,
           result: result,
           updateStack: true,
         );
+        await go(previousRoute);
+        stack.removeLast();
       }
-    }
-    else{
+    } else {
       throw GoError('There is nothing to pop');
     }
   }

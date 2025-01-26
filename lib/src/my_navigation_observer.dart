@@ -71,7 +71,7 @@ class MyNavigationObserver extends NavigatorObserver {
       navigation.onRemovedRoute(
         previousRoute: previousRouteInfo,
         poppedRoute: routeName,
-        // updateStack: !routeName.isShellRoute,
+        updateStack: !routeName.isShellRoute,
       );
       log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
     }

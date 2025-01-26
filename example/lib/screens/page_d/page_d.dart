@@ -17,9 +17,9 @@ class PageD extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              PopButton(),
               PageNameButton(),
               StackButton(),
+              PopButton(),
             ],
           ),
         ),
