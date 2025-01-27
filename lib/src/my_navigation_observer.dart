@@ -27,10 +27,13 @@ class MyNavigationObserver extends NavigatorObserver {
     NavigationInterface navigation = GetIt.instance<NavigationInterface>();
     if (routeInfo != null) {
       navigation.previousRoute = previousRouteInfo;
-      navigation.initializeRoute(
-        routeInfo,
-        addToStack: !routeInfo.isShellRoute,
-      );
+      bool skipInitialization = navigation is NavigationTwoService && navigation.isPopping;
+      if(!skipInitialization) {
+        navigation.initializeRoute(
+          routeInfo,
+          addToStack: !routeInfo.isShellRoute,
+        );
+      }
       log('Pushing to ${routeInfo.name} from ${previousRoute?.settings.name}');
     }
   }
@@ -53,10 +56,15 @@ class MyNavigationObserver extends NavigatorObserver {
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    NavigationInterface navigation = GetIt.instance<NavigationInterface>();
+    if(navigation is NavigationTwoService && navigation.isPopping){
+      didPop(route, previousRoute);
+      return;
+    }
+
     RouteInfo? routeName = _findRouteByName(routeName: route.settings.name ?? '');
 
     if (routeName != null) {
-      NavigationInterface navigation = GetIt.instance<NavigationInterface>();
       RouteInfo? previousRouteInfo = _findRouteByName(routeName: previousRoute?.settings.name ?? '');
       if (routeName.isShellRoute) {
         //disposing children of the shell route because they are not disposed automatically.
@@ -68,12 +76,15 @@ class MyNavigationObserver extends NavigatorObserver {
       }
       navigation.previousRoute = previousRouteInfo;
 
-      navigation.onRemovedRoute(
-        previousRoute: previousRouteInfo,
-        poppedRoute: routeName,
-        updateStack: !routeName.isShellRoute,
-      );
-      log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
+      bool shouldRemoveRoute = !_shouldRemoveRoute(routeInfo: routeName);
+      if(shouldRemoveRoute){
+        navigation.onRemovedRoute(
+          previousRoute: previousRouteInfo,
+          poppedRoute: routeName,
+          updateStack: !routeName.isShellRoute,
+        );
+        log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
+      }
     }
   }
 
@@ -90,5 +101,18 @@ class MyNavigationObserver extends NavigatorObserver {
   @override
   void didStopUserGesture() {
     log('in didStopUserGesture');
+  }
+
+  bool _shouldRemoveRoute({required RouteInfo routeInfo}){
+    NavigationInterface navigation = GetIt.instance<NavigationInterface>();
+    if(navigation is NavigationOneService) return true;
+
+    List<RouteInfo> stack = navigation.stack;
+    int stackLength = stack.length;
+    if(stackLength > 1){
+      bool hasJustPushed = stack[stackLength-2] == routeInfo;
+      return hasJustPushed;
+    }
+    return false;
   }
 }

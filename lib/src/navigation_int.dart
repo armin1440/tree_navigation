@@ -77,7 +77,6 @@ abstract class NavigationInterface {
     registeredControllers[poppedRoute]?.onDispose();
     if (updateStack && stack.isNotEmpty) {
       stack.removeLast();
-      // log('disposeRoute Called. Disposed ${poppedRoute.name}');
     }
   }
 
@@ -99,14 +98,6 @@ abstract class NavigationInterface {
     Object? extra,
     RouteInfo? parentPath,
   });
-
-  // Future<dynamic> go(
-  //   RouteInfo route, {
-  //   Map<String, String> pathParameters = const <String, String>{},
-  //   Map<String, dynamic> queryParameters = const <String, dynamic>{},
-  //   Object? extra,
-  //   RouteInfo? parentPath,
-  // });
 
   Future<T?> openDialog<T>({
     required Widget dialog,

@@ -10,35 +10,11 @@ import 'exceptions.dart';
 
 class NavigationTwoService extends NavigationInterface {
   NavigationTwoService({required super.routeInfoList, required super.globalKeyList});
-
+  bool isPopping = false;
   List<PopResult> popResultList = [];
 
   @override
   Future<dynamic> goNamed(
-    RouteInfo route, {
-    Map<String, String> pathParameters = const <String, String>{},
-    Map<String, dynamic> queryParameters = const <String, dynamic>{},
-    Object? extra,
-    RouteInfo? parentPath,
-  }) async {
-    if (pendingRouteFunction != null) {
-      Function copiedFunction = pendingRouteFunction!;
-      pendingRouteFunction = null;
-      copiedFunction();
-      return null;
-    } else {
-      String path = _tryGeneratingPath(lastPathPart: route.path, parentPath: parentPath?.path);
-      PopResult newResult = PopResult();
-      popResultList.add(newResult);
-      context.go(
-        path,
-        extra: extra,
-      );
-      return await newResult.getFuture();
-    }
-  }
-
-  Future<dynamic> go(
     RouteInfo route, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
@@ -171,30 +147,16 @@ class NavigationTwoService extends NavigationInterface {
 
   @override
   Future<void> pop({dynamic result}) async {
-    // if (popResultList.isNotEmpty) {
-    //   PopResult popResult = popResultList.last;
-    //   if (!popResult.isCompleted) {
-    //     popResult.setValue(result);
-    //   }
-    //   popResultList.removeLast();
-    // }
-
-    // context.pop(result);
-
+    isPopping = true;
     if (stack.isNotEmpty) {
-      int routeBeforeLastIndex = stack.length - 2;
-      RouteInfo? previousRoute = routeBeforeLastIndex < 0 ? null : stack[routeBeforeLastIndex];
+      int indexOfRouteBeforeLast = stack.length - 2;
+      RouteInfo? previousRoute = indexOfRouteBeforeLast < 0 ? null : stack[indexOfRouteBeforeLast];
       if (previousRoute != null) {
-        disposeRoute(
-          previousRoute: previousRoute,
-          poppedRoute: stack.last,
-          result: result,
-          updateStack: true,
-        );
-        await go(previousRoute);
-        stack.removeLast();
+        await goNamed(previousRoute);
       }
+      isPopping = false;
     } else {
+      isPopping = false;
       throw GoError('There is nothing to pop');
     }
   }
@@ -232,7 +194,7 @@ class NavigationTwoService extends NavigationInterface {
     super.onRemovedRoute(
       previousRoute: previousRoute,
       poppedRoute: poppedRoute,
-      // updateStack: updateStack,
+      updateStack: updateStack,
     );
   }
 
