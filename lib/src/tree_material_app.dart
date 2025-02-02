@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:tree_navigation/src/services/navigation_int.dart';
-import 'package:tree_navigation/src/services/navigation_one_service.dart';
-import 'package:tree_navigation/src/services/navigation_two_service.dart';
+import 'package:tree_navigation/src/observers/navigation_observer_int.dart';
+import 'package:tree_navigation/src/observers/navigation_one_observer.dart';
+import 'package:tree_navigation/src/observers/navigation_two_observer.dart';
 
 import '../tree_navigation.dart';
 import 'package:get_it/get_it.dart';
@@ -119,6 +119,8 @@ abstract class TreeNavigation {
     String? routerRestorationScopeId,
     bool requestFocus = true,
   }) {
+    NavigationObserverInterface navigationObserver =
+        navigator is NavigationOneService ? NavigationOneObserver(routeInfoList) : NavigationTwoObserver(routeInfoList);
     routeTree = routes;
     routerConfig ??= RouteTree(
       routeInfoList: routeInfoList,
@@ -134,7 +136,7 @@ abstract class TreeNavigation {
       initialLocation: initialLocation,
       overridePlatformDefaultLocation: overridePlatformDefaultLocation,
       initialExtra: initialExtra,
-      observers: observers,
+      observers: [...?observers, navigationObserver],
       debugLogDiagnostics: debugLogDiagnostics,
       navigatorKey: navigatorKey,
       restorationScopeId: routerRestorationScopeId,
@@ -142,40 +144,40 @@ abstract class TreeNavigation {
     );
 
     return MaterialApp.router(
-        key: key,
-        scaffoldMessengerKey: scaffoldMessengerKey,
-        onNavigationNotification: onNavigationNotification,
-        routeInformationProvider: routeInformationProvider,
-        routeInformationParser: routeInformationParser,
-        routerDelegate: routerDelegate,
-        backButtonDispatcher: backButtonDispatcher,
-        routerConfig: routerConfig,
-        builder: BotToastInit(),
-        title: title,
-        onGenerateTitle: onGenerateTitle,
-        theme: theme,
-        darkTheme: darkTheme,
-        highContrastTheme: highContrastTheme,
-        highContrastDarkTheme: highContrastDarkTheme,
-        themeMode: themeMode,
-        themeAnimationDuration: themeAnimationDuration,
-        themeAnimationCurve: themeAnimationCurve,
-        color: color,
-        locale: locale,
-        localizationsDelegates: localizationsDelegates,
-        localeListResolutionCallback: localeListResolutionCallback,
-        localeResolutionCallback: localeResolutionCallback,
-        supportedLocales: supportedLocales,
-        showPerformanceOverlay: showPerformanceOverlay,
-        checkerboardOffscreenLayers: checkerboardOffscreenLayers,
-        showSemanticsDebugger: showSemanticsDebugger,
-        debugShowCheckedModeBanner: debugShowCheckedModeBanner,
-        shortcuts: shortcuts,
-        actions: actions,
-        restorationScopeId: materialAppRestorationScopeId,
-        scrollBehavior: scrollBehavior,
-        themeAnimationStyle: themeAnimationStyle,
-      );
+      key: key,
+      scaffoldMessengerKey: scaffoldMessengerKey,
+      onNavigationNotification: onNavigationNotification,
+      routeInformationProvider: routeInformationProvider,
+      routeInformationParser: routeInformationParser,
+      routerDelegate: routerDelegate,
+      backButtonDispatcher: backButtonDispatcher,
+      routerConfig: routerConfig,
+      builder: BotToastInit(),
+      title: title,
+      onGenerateTitle: onGenerateTitle,
+      theme: theme,
+      darkTheme: darkTheme,
+      highContrastTheme: highContrastTheme,
+      highContrastDarkTheme: highContrastDarkTheme,
+      themeMode: themeMode,
+      themeAnimationDuration: themeAnimationDuration,
+      themeAnimationCurve: themeAnimationCurve,
+      color: color,
+      locale: locale,
+      localizationsDelegates: localizationsDelegates,
+      localeListResolutionCallback: localeListResolutionCallback,
+      localeResolutionCallback: localeResolutionCallback,
+      supportedLocales: supportedLocales,
+      showPerformanceOverlay: showPerformanceOverlay,
+      checkerboardOffscreenLayers: checkerboardOffscreenLayers,
+      showSemanticsDebugger: showSemanticsDebugger,
+      debugShowCheckedModeBanner: debugShowCheckedModeBanner,
+      shortcuts: shortcuts,
+      actions: actions,
+      restorationScopeId: materialAppRestorationScopeId,
+      scrollBehavior: scrollBehavior,
+      themeAnimationStyle: themeAnimationStyle,
+    );
   }
 
   static NavigationInterface get navigator {

@@ -22,14 +22,8 @@ class PageA extends StatelessWidget {
               GoButton(route: Routes.pageB),
               GoButton(route: Routes.pageC),
               GoButton(route: Routes.pageD),
-              GoButton(
-                route: Routes.pageD,
-                parent: Routes.pageC,
-              ),
-              GoButton(
-                route: Routes.pageD,
-                parent: Routes.pageB,
-              ),
+              // GoButton(route: Routes.pageD, parent: Routes.pageC),
+              // GoButton(route: Routes.pageD, parent: Routes.pageB),
               PageNameButton(),
               StackButton(),
               PopButton(),

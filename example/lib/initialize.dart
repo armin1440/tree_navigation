@@ -2,6 +2,7 @@ import 'package:example/screens/page_a/a_controller.dart';
 import 'package:example/screens/page_b/b_controller.dart';
 import 'package:example/screens/page_c/c_controller.dart';
 import 'package:example/screens/page_d/d_controller.dart';
+import 'package:example/screens/wrapper/wrapper_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:tree_navigation/tree_navigation.dart';
@@ -48,17 +49,20 @@ void initControllers() {
   BController bController = BController();
   CController cController = CController();
   DController dController = DController();
+  WrapperController wrapperController = WrapperController();
 
 
   GetIt.instance.registerSingleton(aController);
   GetIt.instance.registerSingleton(bController);
   GetIt.instance.registerSingleton(cController);
   GetIt.instance.registerSingleton(dController);
+  GetIt.instance.registerSingleton(wrapperController);
 
   ns.registerAllControllers({
     Routes.pageA: aController,
     Routes.pageB: bController,
     Routes.pageC: cController,
     Routes.pageD: dController,
+    // Routes.
   });
 }

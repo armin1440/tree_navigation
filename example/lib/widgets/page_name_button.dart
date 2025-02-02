@@ -6,10 +6,12 @@ class PageNameButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String currentPageName = RouteProvider.of(context)?.name ?? 'Unknown';
-
     return TextButton(
-      onPressed: () => TreeNavigation.navigator.showTextToast(text: 'I am page "$currentPageName"'),
+      onPressed: () {
+        RouteInfo? route = RouteProvider.of(context);
+        String currentPageName = route?.name ?? 'Unknown';
+        TreeNavigation.navigator.showTextToast(text: 'I am page "$currentPageName"');
+      },
       child: const Text(
         'Introduce Me',
         style: TextStyle(fontSize: 18),

@@ -3,6 +3,7 @@ import 'package:example/screens/page_a/page_a.dart';
 import 'package:example/screens/page_b/page_b.dart';
 import 'package:example/screens/page_c/page_c.dart';
 import 'package:example/screens/page_d/page_d.dart';
+import 'package:example/screens/wrapper/wrapper_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -51,9 +52,18 @@ class _MyAppState extends ConsumerState<MyApp> {
           routeInfo: Routes.pageC,
           pageWidget: const PageC(),
         ),
-        TreeRoute(
-          routeInfo: Routes.pageD,
-          pageWidget: const PageD(),
+        // TreeRoute(
+        //   routeInfo: Routes.pageD,
+        //   pageWidget: const PageD(),
+        // ),
+        TreeShellRoute(
+          pageWidget: (child) => WrapperView(child: child),
+          routes: [
+            TreeRoute(
+              routeInfo: Routes.pageD,
+              pageWidget: const PageD(),
+            ),
+          ],
         ),
       ],
     );
@@ -61,26 +71,11 @@ class _MyAppState extends ConsumerState<MyApp> {
 }
 
 abstract class Routes {
-  static const RouteInfo pageB = RouteInfo(
-    path: '/b',
-    name: 'B',
-    isShellRoute: false,
-  );
-  static const RouteInfo pageA = RouteInfo(
-    path: '/',
-    name: 'A',
-    isShellRoute: false,
-  );
-  static const RouteInfo pageC = RouteInfo(
-    path: '/c',
-    name: 'C',
-    isShellRoute: false,
-  );
-  static const RouteInfo pageD = RouteInfo(
-    path: '/d',
-    name: 'D',
-    isShellRoute: false,
-  );
+  static const RouteInfo pageA = RouteInfo.normal(path: '/', name: 'A');
+  static const RouteInfo pageB = RouteInfo.normal(path: '/b', name: 'B');
+  static const RouteInfo pageC = RouteInfo.normal(path: '/c', name: 'C');
+  static const RouteInfo pageD = RouteInfo.normal(path: '/d', name: 'D');
+  static const RouteInfo wrapper = RouteInfo.shell();
 
-  static const List<RouteInfo> allRoutes = [pageB, pageA, pageC, pageD];
+  static const List<RouteInfo> allRoutes = [pageB, pageA, pageC, pageD, wrapper];
 }

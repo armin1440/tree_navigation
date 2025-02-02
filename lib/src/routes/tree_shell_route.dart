@@ -56,7 +56,8 @@ class TreeShellRoute extends ShellRoute {
     super.navigatorKey,
     super.restorationScopeId,
     this.pageWidget,
-  }) : super(
+  })  : assert(pageBuilder != null || pageWidget != null, 'Either pageBuilder or pageWidget must be non null'),
+        super(
           observers: [NavigationTwoObserver(routeInfoList), ...(observers ?? [])],
           pageBuilder: pageBuilder != null
               ? (context, state, widget) => pageBuilder(context, state, widget)

@@ -63,7 +63,7 @@ class RouteTree implements GoRouter {
       initialLocation: initialLocation,
       overridePlatformDefaultLocation: overridePlatformDefaultLocation,
       initialExtra: initialExtra,
-      observers: [NavigationTwoObserver(routeInfoList), BotToastNavigatorObserver(), ...(observers ?? [])],
+      observers: [BotToastNavigatorObserver(), ...(observers ?? [])],
       debugLogDiagnostics: debugLogDiagnostics,
       navigatorKey: navigatorKey,
       restorationScopeId: restorationScopeId,

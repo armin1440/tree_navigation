@@ -1,9 +1,13 @@
 class RouteInfo {
-  const RouteInfo({
+  const RouteInfo.normal({
     required this.path,
     required this.name,
-    required this.isShellRoute,
-  });
+  }) : isShellRoute = false;
+
+  const RouteInfo.shell()
+      : isShellRoute = true,
+        path = '',
+        name = '';
 
   final String path;
   final String name;
