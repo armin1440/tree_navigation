@@ -2,15 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
-import 'package:tree_navigation/src/route_info.dart';
 
-import '../tree_navigation.dart';
-import 'navigation_int.dart';
+import '../../tree_navigation.dart';
+import 'navigation_observer_int.dart';
 
-class MyNavigationObserver extends NavigatorObserver {
-  MyNavigationObserver(this.routeInfoList);
-
-  final List<RouteInfo> routeInfoList;
+class NavigationTwoObserver extends NavigationObserverInterface {
+  NavigationTwoObserver(super.routeInfoList);
 
   RouteInfo? _findRouteByName({required String routeName}) {
     int index = routeInfoList.indexWhere((element) => element.name == routeName);
@@ -28,7 +25,7 @@ class MyNavigationObserver extends NavigatorObserver {
     if (routeInfo != null) {
       navigation.previousRoute = previousRouteInfo;
       bool skipInitialization = navigation is NavigationTwoService && navigation.isPopping;
-      if(!skipInitialization) {
+      if (!skipInitialization) {
         navigation.initializeRoute(
           routeInfo,
           addToStack: !routeInfo.isShellRoute,
@@ -57,7 +54,7 @@ class MyNavigationObserver extends NavigatorObserver {
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
     NavigationInterface navigation = GetIt.instance<NavigationInterface>();
-    if(navigation is NavigationTwoService && navigation.isPopping){
+    if (navigation is NavigationTwoService && navigation.isPopping) {
       didPop(route, previousRoute);
       return;
     }
@@ -77,7 +74,7 @@ class MyNavigationObserver extends NavigatorObserver {
       navigation.previousRoute = previousRouteInfo;
 
       bool shouldRemoveRoute = !_shouldRemoveRoute(routeInfo: routeName);
-      if(shouldRemoveRoute){
+      if (shouldRemoveRoute) {
         navigation.onRemovedRoute(
           previousRoute: previousRouteInfo,
           poppedRoute: routeName,
@@ -103,14 +100,14 @@ class MyNavigationObserver extends NavigatorObserver {
     log('in didStopUserGesture');
   }
 
-  bool _shouldRemoveRoute({required RouteInfo routeInfo}){
+  bool _shouldRemoveRoute({required RouteInfo routeInfo}) {
     NavigationInterface navigation = GetIt.instance<NavigationInterface>();
-    if(navigation is NavigationOneService) return true;
+    if (navigation is NavigationOneService) return true;
 
     List<RouteInfo> stack = navigation.stack;
     int stackLength = stack.length;
-    if(stackLength > 1){
-      bool hasJustPushed = stack[stackLength-2] == routeInfo;
+    if (stackLength > 1) {
+      bool hasJustPushed = stack[stackLength - 2] == routeInfo;
       return hasJustPushed;
     }
     return false;

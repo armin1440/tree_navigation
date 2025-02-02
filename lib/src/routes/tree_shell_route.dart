@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tree_navigation/src/route_info.dart';
 import 'package:get_it/get_it.dart';
-import './navigation_int.dart';
-import './tree_material_app.dart';
+import '../services/navigation_int.dart';
+import '../tree_material_app.dart';
 
-import 'my_navigation_observer.dart';
+import '../observers/navigation_two_observer.dart';
 
 typedef TreeRoutePageBuilder = Page<dynamic> Function(
   BuildContext context,
@@ -57,7 +57,7 @@ class TreeShellRoute extends ShellRoute {
     super.restorationScopeId,
     this.pageWidget,
   }) : super(
-          observers: [MyNavigationObserver(routeInfoList), ...(observers ?? [])],
+          observers: [NavigationTwoObserver(routeInfoList), ...(observers ?? [])],
           pageBuilder: pageBuilder != null
               ? (context, state, widget) => pageBuilder(context, state, widget)
               : TreeNavigation.defaultShellPageBuilder != null

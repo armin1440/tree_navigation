@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tree_navigation/src/route_tree.dart';
-import './route_info.dart';
-import './tree_material_app.dart';
+import '../route_info.dart';
+import '../tree_material_app.dart';
 
 typedef TreeRouteExitCallback = FutureOr<bool> Function(BuildContext context, GoRouterState state);
 

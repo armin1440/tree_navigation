@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tree_navigation/src/route_info.dart';
 
-import 'my_navigation_observer.dart';
+import 'observers/navigation_two_observer.dart';
 
 typedef ExceptionHandler = void Function(
   BuildContext context,
@@ -63,7 +63,7 @@ class RouteTree implements GoRouter {
       initialLocation: initialLocation,
       overridePlatformDefaultLocation: overridePlatformDefaultLocation,
       initialExtra: initialExtra,
-      observers: [MyNavigationObserver(routeInfoList), BotToastNavigatorObserver(), ...(observers ?? [])],
+      observers: [NavigationTwoObserver(routeInfoList), BotToastNavigatorObserver(), ...(observers ?? [])],
       debugLogDiagnostics: debugLogDiagnostics,
       navigatorKey: navigatorKey,
       restorationScopeId: restorationScopeId,

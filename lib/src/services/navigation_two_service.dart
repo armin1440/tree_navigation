@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tree_navigation/src/pop_result.dart';
 
-import '../tree_navigation.dart';
-import 'exceptions.dart';
+import '../../tree_navigation.dart';
+import '../exceptions.dart';
+import 'navigation_int.dart';
 
 class NavigationTwoService extends NavigationInterface {
   NavigationTwoService({required super.routeInfoList, required super.globalKeyList});

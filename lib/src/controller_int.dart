@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:get_it/get_it.dart';
-import 'navigation_int.dart';
+import 'package:tree_navigation/src/services/navigation_int.dart';
 
 abstract class ControllerInterface {
   late NavigationInterface navigation;
