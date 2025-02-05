@@ -9,7 +9,7 @@ class NavigationObserverInterface extends NavigatorObserver {
 
   final List<RouteInfo> routeInfoList;
 
-  RouteInfo? findRouteByName({required String routeName}) {
+  RouteInfo? findRouteByName({required String? routeName}) {
     int index = routeInfoList.indexWhere((element) => element.name == routeName);
     if (index < 0) {
       return null;

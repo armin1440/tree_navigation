@@ -75,7 +75,7 @@ abstract class Routes {
   static const RouteInfo pageB = RouteInfo.normal(path: '/b', name: 'B');
   static const RouteInfo pageC = RouteInfo.normal(path: '/c', name: 'C');
   static const RouteInfo pageD = RouteInfo.normal(path: '/d', name: 'D');
-  static const RouteInfo wrapper = RouteInfo.shell();
+  static const RouteInfo wrapper = RouteInfo.shell(name: 'Wrapper');
 
   static const List<RouteInfo> allRoutes = [pageB, pageA, pageC, pageD, wrapper];
 }

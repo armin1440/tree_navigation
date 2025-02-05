@@ -44,12 +44,11 @@ class NavigationTwoObserver extends NavigationObserverInterface {
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    if (navigation.isPopping) {
+    RouteInfo? routeName = findRouteByName(routeName: route.settings.name);
+    if (navigation.isPopping && !(routeName?.isShellRoute ?? false)) {
       didPop(route, previousRoute);
       return;
     }
-
-    RouteInfo? routeName = findRouteByName(routeName: route.settings.name ?? '');
 
     if (routeName != null) {
       RouteInfo? previousRouteInfo = findRouteByName(routeName: previousRoute?.settings.name ?? '');
