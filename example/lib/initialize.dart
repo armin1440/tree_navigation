@@ -16,6 +16,7 @@ void init(){
     routeInfoList: Routes.allRoutes,
     routeTreeDefaultPageBuilder: (_, state, child, routeName) => MyCustomTransitionPage(
       key: state.pageKey,
+      isShellRoute: false,
       child: child,
       name: routeName,
       transitionsBuilder: (_, animation, ___, widget) {
@@ -27,6 +28,7 @@ void init(){
     ),
     routeTreeDefaultShellPageBuilder: (_, state, parent, child) => MyCustomTransitionPage(
       key: state.pageKey,
+      isShellRoute: true,
       child: parent(child),
       transitionsBuilder: (_, animation, ___, widget) {
         const begin = Offset(0.0, 1.0);

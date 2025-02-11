@@ -10,13 +10,13 @@ import 'package:tree_navigation/src/observers/navigation_two_observer.dart';
 import '../tree_navigation.dart';
 import 'package:get_it/get_it.dart';
 
-typedef RouteTreeDefaultPageBuilder = Page<dynamic> Function(
+typedef RouteTreeDefaultPageBuilder = MyCustomTransitionPage<dynamic> Function(
   BuildContext context,
   GoRouterState state,
   Widget widget,
   String routeName,
 );
-typedef RouteTreeDefaultShellPageBuilder = Page<dynamic> Function(
+typedef RouteTreeDefaultShellPageBuilder = MyCustomTransitionPage<dynamic> Function(
   BuildContext context,
   GoRouterState state,
   Widget Function(Widget) parent,

@@ -17,5 +17,9 @@ class MyCustomTransitionPage<T> extends CustomTransitionPage<T> {
     super.name,
     super.arguments,
     super.restorationId,
+    required this.isShellRoute,
   });
+
+  final bool isShellRoute;
+  // final String name;
 }

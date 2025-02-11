@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tree_navigation/src/route_info.dart';
 import 'package:get_it/get_it.dart';
+import 'package:tree_navigation/src/transitions/my_custom_transition_page.dart';
 import '../services/navigation_int.dart';
 import '../tree_material_app.dart';
 
@@ -23,7 +24,7 @@ typedef TreeShellRouteBuilder = Widget Function(
   Widget child,
 );
 
-typedef TreeShellRoutePageBuilder = Page<dynamic> Function(
+typedef TreeShellRoutePageBuilder = MyCustomTransitionPage<dynamic> Function(
   BuildContext context,
   GoRouterState state,
   Widget child,
@@ -49,7 +50,7 @@ class TreeShellRoute extends ShellRoute {
     required List<RouteInfo> routeInfoList,
     super.redirect,
     super.builder,
-    ShellRoutePageBuilder? pageBuilder,
+    TreeShellRoutePageBuilder? pageBuilder,
     List<NavigatorObserver>? observers,
     required super.routes,
     super.parentNavigatorKey,
@@ -69,8 +70,6 @@ class TreeShellRoute extends ShellRoute {
 
   factory TreeShellRoute({
     GoRouterRedirect? redirect,
-    ShellRouteBuilder? builder,
-    ShellRoutePageBuilder? pageBuilder,
     List<NavigatorObserver>? observers,
     required List<RouteBase> routes,
     GlobalKey<NavigatorState>? parentNavigatorKey,
@@ -83,8 +82,6 @@ class TreeShellRoute extends ShellRoute {
     return TreeShellRoute._(
       routeInfoList: navigationInterface.routeInfoList,
       redirect: redirect,
-      builder: builder,
-      pageBuilder: pageBuilder,
       observers: observers,
       routes: routes,
       parentNavigatorKey: parentNavigatorKey,
@@ -94,8 +91,19 @@ class TreeShellRoute extends ShellRoute {
     );
   }
 
-  TreeShellRoute withPageBuilder(ShellRoutePageBuilder pageBuilder) {
-    return TreeShellRoute(
+  factory TreeShellRoute.withPageBuilder({
+    GoRouterRedirect? redirect,
+    TreeShellRouteBuilder? builder,
+    TreeShellRoutePageBuilder? pageBuilder,
+    List<NavigatorObserver>? observers,
+    required List<RouteBase> routes,
+    GlobalKey<NavigatorState>? parentNavigatorKey,
+    GlobalKey<NavigatorState>? navigatorKey,
+    String? restorationScopeId,
+  }) {
+    NavigationInterface navigationInterface = GetIt.instance<NavigationInterface>();
+
+    return TreeShellRoute._(
       redirect: redirect,
       builder: builder,
       pageBuilder: pageBuilder,
@@ -104,7 +112,7 @@ class TreeShellRoute extends ShellRoute {
       parentNavigatorKey: parentNavigatorKey,
       navigatorKey: navigatorKey,
       restorationScopeId: restorationScopeId,
-      pageWidget: pageWidget,
+      routeInfoList: navigationInterface.routeInfoList,
     );
   }
 }
