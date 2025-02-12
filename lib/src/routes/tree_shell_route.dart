@@ -45,6 +45,7 @@ typedef StatefulTreeShellRoutePageBuilder = Page<dynamic> Function(
 class TreeShellRoute extends ShellRoute {
   ///This is used by defaultShellPageBuilder that might be set in RouteTree
   final Widget Function(Widget)? pageWidget;
+  final String name;
 
   TreeShellRoute._({
     required List<RouteInfo> routeInfoList,
@@ -57,6 +58,7 @@ class TreeShellRoute extends ShellRoute {
     super.navigatorKey,
     super.restorationScopeId,
     this.pageWidget,
+    required this.name,
   })  : assert(pageBuilder != null || pageWidget != null, 'Either pageBuilder or pageWidget must be non null'),
         super(
           observers: [NavigationTwoObserver(routeInfoList), ...(observers ?? [])],
@@ -64,7 +66,7 @@ class TreeShellRoute extends ShellRoute {
               ? (context, state, widget) => pageBuilder(context, state, widget)
               : TreeNavigation.defaultShellPageBuilder != null
                   ? (context, state, widget) =>
-                      TreeNavigation.defaultShellPageBuilder!(context, state, pageWidget!, widget)
+                      TreeNavigation.defaultShellPageBuilder!(context, state, pageWidget!, widget, name)
                   : null,
         );
 
@@ -76,6 +78,7 @@ class TreeShellRoute extends ShellRoute {
     GlobalKey<NavigatorState>? navigatorKey,
     String? restorationScopeId,
     Widget Function(Widget)? pageWidget,
+    required String name,
   }) {
     NavigationInterface navigationInterface = GetIt.instance<NavigationInterface>();
 
@@ -88,6 +91,7 @@ class TreeShellRoute extends ShellRoute {
       navigatorKey: navigatorKey,
       restorationScopeId: restorationScopeId,
       pageWidget: pageWidget,
+      name: name
     );
   }
 
@@ -100,6 +104,7 @@ class TreeShellRoute extends ShellRoute {
     GlobalKey<NavigatorState>? parentNavigatorKey,
     GlobalKey<NavigatorState>? navigatorKey,
     String? restorationScopeId,
+    required String name,
   }) {
     NavigationInterface navigationInterface = GetIt.instance<NavigationInterface>();
 
@@ -113,6 +118,7 @@ class TreeShellRoute extends ShellRoute {
       navigatorKey: navigatorKey,
       restorationScopeId: restorationScopeId,
       routeInfoList: navigationInterface.routeInfoList,
+      name: name
     );
   }
 }

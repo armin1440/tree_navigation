@@ -10,6 +10,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tree_navigation/tree_navigation.dart';
 
 GlobalKey<NavigatorState> topKey = GlobalKey<NavigatorState>();
+GlobalKey<NavigatorState> shellKey = GlobalKey<NavigatorState>();
 
 void main() {
   init();
@@ -37,7 +38,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     return TreeNavigation.makeMaterialApp(
       navigatorKey: topKey,
-      globalKeyList: [topKey],
+      globalKeyList: [topKey, shellKey],
       routeInfoList: Routes.allRoutes,
       routes: [
         TreeRoute(
@@ -58,6 +59,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         // ),
         TreeShellRoute(
           pageWidget: (child) => WrapperView(child: child),
+          navigatorKey: shellKey,
+          name: Routes.wrapper.name,
           routes: [
             TreeRoute(
               routeInfo: Routes.pageD,

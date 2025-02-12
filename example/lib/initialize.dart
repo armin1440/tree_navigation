@@ -12,7 +12,7 @@ import 'main.dart';
 void init(){
   TreeNavigation.init(
     useNavigationOne: false,
-    globalKeyList: [topKey],
+    globalKeyList: [topKey, shellKey],
     routeInfoList: Routes.allRoutes,
     routeTreeDefaultPageBuilder: (_, state, child, routeName) => MyCustomTransitionPage(
       key: state.pageKey,
@@ -26,10 +26,11 @@ void init(){
         );
       },
     ),
-    routeTreeDefaultShellPageBuilder: (_, state, parent, child) => MyCustomTransitionPage(
+    routeTreeDefaultShellPageBuilder: (_, state, parent, child, name) => MyCustomTransitionPage(
       key: state.pageKey,
       isShellRoute: true,
       child: parent(child),
+      name: name,
       transitionsBuilder: (_, animation, ___, widget) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;
@@ -65,6 +66,6 @@ void initControllers() {
     Routes.pageB: bController,
     Routes.pageC: cController,
     Routes.pageD: dController,
-    // Routes.
+    Routes.wrapper: wrapperController,
   });
 }

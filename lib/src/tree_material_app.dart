@@ -21,6 +21,7 @@ typedef RouteTreeDefaultShellPageBuilder = MyCustomTransitionPage<dynamic> Funct
   GoRouterState state,
   Widget Function(Widget) parent,
   Widget childWidget,
+    String name,
 );
 
 abstract class TreeNavigation {

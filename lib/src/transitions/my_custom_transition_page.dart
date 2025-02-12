@@ -1,4 +1,3 @@
-
 import 'package:go_router/go_router.dart';
 
 class MyCustomTransitionPage<T> extends CustomTransitionPage<T> {
@@ -14,12 +13,13 @@ class MyCustomTransitionPage<T> extends CustomTransitionPage<T> {
     super.barrierColor,
     super.barrierLabel,
     required super.key,
-    super.name,
+    required String name,
     super.arguments,
     super.restorationId,
     required this.isShellRoute,
-  });
+  })  : myName = name,
+        super(name: name);
 
   final bool isShellRoute;
-  // final String name;
+  final String myName;
 }

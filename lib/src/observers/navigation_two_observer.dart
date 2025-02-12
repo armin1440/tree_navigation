@@ -15,14 +15,11 @@ class NavigationTwoObserver extends NavigationObserverInterface {
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     RouteInfo? routeInfo = findRouteByName(routeName: route.settings.name ?? '');
     RouteInfo? previousRouteInfo = findRouteByName(routeName: previousRoute?.settings.name ?? '');
-    List<Page>? pages = navigator?.widget.pages;
-    if(pages?.first != null && pages?.first is MyCustomTransitionPage){
-      MyCustomTransitionPage page = pages!.first as MyCustomTransitionPage;
-    }
+
     if (routeInfo != null) {
-      navigation.previousRoute = previousRouteInfo;
       bool skipInitialization = navigation.isPopping;
       if (!skipInitialization) {
+        navigation.previousRoute = previousRouteInfo;
         navigation.initializeRoute(
           routeInfo,
           addToStack: !routeInfo.isShellRoute,
@@ -49,9 +46,8 @@ class NavigationTwoObserver extends NavigationObserverInterface {
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    final pages =navigator?.widget.pages;
-
     RouteInfo? routeName = findRouteByName(routeName: route.settings.name);
+
     if (navigation.isPopping && !(routeName?.isShellRoute ?? false)) {
       didPop(route, previousRoute);
       return;
@@ -59,10 +55,20 @@ class NavigationTwoObserver extends NavigationObserverInterface {
 
     if (routeName != null) {
       RouteInfo? previousRouteInfo = findRouteByName(routeName: previousRoute?.settings.name ?? '');
-      navigation.previousRoute = previousRouteInfo;
+
+      if (routeName.isShellRoute) {
+        List shellRouteChildren = navigation.stack.sublist(1, navigation.stack.length);
+        //disposing children of the shell route because they are not disposed automatically.
+        shellRouteChildren.reversed.forEach((element) {
+          navigation.registeredControllers[element]?.onDispose();
+        });
+        //keeping the last element in the stack because it is the new page that is navigated to.
+        navigation.stack = navigation.stack.where((e) => !shellRouteChildren.contains(e)).toList();
+      }
 
       bool shouldRemoveRoute = _shouldRemoveRoute(routeInfo: routeName);
       if (shouldRemoveRoute) {
+        navigation.previousRoute = previousRouteInfo;
         navigation.onRemovedRoute(
           previousRoute: previousRouteInfo,
           poppedRoute: routeName,
@@ -70,18 +76,11 @@ class NavigationTwoObserver extends NavigationObserverInterface {
         );
         log('Removing ${routeName.name}, previous is ${previousRoute?.settings.name}');
       }
-    } else {
-      //It must be shell route because shell routes do not have name in route.settings.name
-      //disposing children of the shell route because they are not disposed automatically.
-      navigation.stack.sublist(0, navigation.stack.length - 1).reversed.forEach((element) {
-        navigation.registeredControllers[element]?.onDispose();
-      });
-      //keeping the last element in the stack because it is the new page that is navigated to.
-      navigation.stack = [navigation.stack.last];
     }
   }
 
   bool _shouldRemoveRoute({required RouteInfo routeInfo}) {
+    if(routeInfo.isShellRoute) return true;
     List<RouteInfo> stack = navigation.stack;
     int stackLength = stack.length;
     if (stackLength > 1) {
