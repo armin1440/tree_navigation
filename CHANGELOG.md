@@ -1,3 +1,7 @@
+## [1.1.7] - 02.03.2025
+
+* Updated GoRouter to 14.8.1
+
 ## [1.1.6] - 08.01.2025
 
 * Set toast background color to transparent.
