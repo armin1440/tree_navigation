@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
   initState() {
     super.initState();
     TreeNavigation.init(
-      useNavigationOne: false,
+      useNavigationOne: true,
       globalKeyList: [topKey, shellKey],
       routeInfoList: Routes.allRoutes,
       routeTreeDefaultPageBuilder: (_, state, child, routeName) => MyCustomTransitionPage(
