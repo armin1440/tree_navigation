@@ -114,7 +114,6 @@ abstract class TreeNavigation {
     List<NavigatorObserver>? observers,
     bool debugLogDiagnostics = false,
     required GlobalKey<NavigatorState> navigatorKey,
-    required List<GlobalKey<NavigatorState>> globalKeyList,
     String? routerRestorationScopeId,
     bool requestFocus = true,
   }) {

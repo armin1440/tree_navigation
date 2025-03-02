@@ -57,9 +57,14 @@ class TreeShellRoute extends ShellRoute {
     super.restorationScopeId,
     this.pageWidget,
   }) : super(
-    observers: [MyNavigationObserver(routeInfoList), ...(observers ?? [])],
-    pageBuilder: pageBuilder != null ? (context, state, widget) => pageBuilder(context, state, widget) : TreeNavigation.defaultShellPageBuilder != null ? (context, state, widget) => TreeNavigation.defaultShellPageBuilder!(context, state, pageWidget!, widget) : null,
-  );
+          observers: [MyNavigationObserver(routeInfoList), ...(observers ?? [])],
+          pageBuilder: pageBuilder != null
+              ? (context, state, widget) => pageBuilder(context, state, widget)
+              : TreeNavigation.defaultShellPageBuilder != null
+                  ? (context, state, widget) =>
+                      TreeNavigation.defaultShellPageBuilder!(context, state, pageWidget!, widget)
+                  : null,
+        );
 
   factory TreeShellRoute({
     GoRouterRedirect? redirect,
@@ -71,7 +76,7 @@ class TreeShellRoute extends ShellRoute {
     GlobalKey<NavigatorState>? navigatorKey,
     String? restorationScopeId,
     Widget Function(Widget)? pageWidget,
-  }){
+  }) {
     NavigationInterface navigationInterface = GetIt.instance<NavigationInterface>();
 
     return TreeShellRoute._(
@@ -87,18 +92,18 @@ class TreeShellRoute extends ShellRoute {
       pageWidget: pageWidget,
     );
   }
-  
-  TreeShellRoute withPageBuilder(ShellRoutePageBuilder pageBuilder){
+
+  TreeShellRoute withPageBuilder(ShellRoutePageBuilder pageBuilder) {
     return TreeShellRoute(
-        redirect: redirect,
-        builder: builder,
-        pageBuilder: pageBuilder,
-        observers: observers,
-        routes: routes,
-        parentNavigatorKey: parentNavigatorKey,
-        navigatorKey: navigatorKey,
-        restorationScopeId: restorationScopeId,
-        pageWidget: pageWidget,
+      redirect: redirect,
+      builder: builder,
+      pageBuilder: pageBuilder,
+      observers: observers,
+      routes: routes,
+      parentNavigatorKey: parentNavigatorKey,
+      navigatorKey: navigatorKey,
+      restorationScopeId: restorationScopeId,
+      pageWidget: pageWidget,
     );
   }
 }

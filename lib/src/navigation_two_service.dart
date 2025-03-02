@@ -3,11 +3,8 @@ import 'dart:async';
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:tree_navigation/src/exceptions.dart';
 import 'package:tree_navigation/src/pop_result.dart';
 import 'package:tree_navigation/src/route_info.dart';
-// import 'package:tree_navigation/src/tree_material_app.dart';
-// import 'package:tree_navigation/src/tree_route.dart';
 
 import 'navigation_int.dart';
 
@@ -31,6 +28,12 @@ class NavigationTwoService extends NavigationInterface {
     } else {
       PopResult newResult = PopResult();
       popResultList.add(newResult);
+      context.goNamed(
+        route.name,
+        extra: extra,
+        pathParameters: pathParameters,
+        queryParameters: queryParameters,
+      );
       return await newResult.getFuture();
     }
   }
@@ -180,7 +183,7 @@ class NavigationTwoService extends NavigationInterface {
     bool updateStack = true,
     dynamic result,
   }) async {
-    if(result is Future){
+    if (result is Future) {
       result = await result;
     }
     _completePopResult(result: result);
@@ -197,58 +200,58 @@ class NavigationTwoService extends NavigationInterface {
     }
   }
 
-  // String _generatePath({required String lastPathPart, required String? parentPath}) {
-  //   String path = '';
-  //   if (TreeNavigation.routeTree != null) {
-  //     String? finalPath = _generateFullPath(lastPathPart: lastPathPart, parentPath: parentPath);
-  //     if (finalPath == null) {
-  //       throw RouteNotFoundException(lastPathPart);
-  //     } else {
-  //       path = finalPath;
-  //     }
-  //   }
-  //   return path;
-  // }
+// String _generatePath({required String lastPathPart, required String? parentPath}) {
+//   String path = '';
+//   if (TreeNavigation.routeTree != null) {
+//     String? finalPath = _generateFullPath(lastPathPart: lastPathPart, parentPath: parentPath);
+//     if (finalPath == null) {
+//       throw RouteNotFoundException(lastPathPart);
+//     } else {
+//       path = finalPath;
+//     }
+//   }
+//   return path;
+// }
 
-  // String? _generateFullPath({
-  //   required String lastPathPart,
-  //   String? parentPath,
-  //   String pathToHere = '',
-  //   RouteBase? root,
-  // }) {
-  //   List<RouteBase> routes = TreeNavigation.routeTree ?? [];
-  //   String? output;
-  //   for (var route in (root?.routes ?? routes)) {
-  //     String trimmedTmpPath = route is TreeRoute ? route.path.replaceAll('/', '') : '';
-  //     String trimmedLastPathPart = lastPathPart.replaceAll('/', '');
-  //     if (trimmedTmpPath == trimmedLastPathPart) {
-  //       String fullPath = '$pathToHere/$trimmedTmpPath';
-  //       List<String> pathParts = fullPath.split('/');
-  //       if (parentPath != null) {
-  //         String trimmedParent = parentPath.replaceAll('/', '');
-  //         if (pathParts.contains(trimmedParent)) {
-  //           output = fullPath;
-  //           break;
-  //         }
-  //       } else {
-  //         output = fullPath;
-  //         break;
-  //       }
-  //     }
-  //     bool hasChildren = route.routes.isNotEmpty;
-  //     if (hasChildren) {
-  //       output = _generateFullPath(
-  //         lastPathPart: lastPathPart,
-  //         parentPath: parentPath,
-  //         pathToHere: '$pathToHere${trimmedTmpPath.isNotEmpty ? '/' : ''}$trimmedTmpPath',
-  //         root: route,
-  //       );
-  //       if (output != null) {
-  //         break;
-  //       }
-  //     }
-  //   }
-  //
-  //   return output;
-  // }
+// String? _generateFullPath({
+//   required String lastPathPart,
+//   String? parentPath,
+//   String pathToHere = '',
+//   RouteBase? root,
+// }) {
+//   List<RouteBase> routes = TreeNavigation.routeTree ?? [];
+//   String? output;
+//   for (var route in (root?.routes ?? routes)) {
+//     String trimmedTmpPath = route is TreeRoute ? route.path.replaceAll('/', '') : '';
+//     String trimmedLastPathPart = lastPathPart.replaceAll('/', '');
+//     if (trimmedTmpPath == trimmedLastPathPart) {
+//       String fullPath = '$pathToHere/$trimmedTmpPath';
+//       List<String> pathParts = fullPath.split('/');
+//       if (parentPath != null) {
+//         String trimmedParent = parentPath.replaceAll('/', '');
+//         if (pathParts.contains(trimmedParent)) {
+//           output = fullPath;
+//           break;
+//         }
+//       } else {
+//         output = fullPath;
+//         break;
+//       }
+//     }
+//     bool hasChildren = route.routes.isNotEmpty;
+//     if (hasChildren) {
+//       output = _generateFullPath(
+//         lastPathPart: lastPathPart,
+//         parentPath: parentPath,
+//         pathToHere: '$pathToHere${trimmedTmpPath.isNotEmpty ? '/' : ''}$trimmedTmpPath',
+//         root: route,
+//       );
+//       if (output != null) {
+//         break;
+//       }
+//     }
+//   }
+//
+//   return output;
+// }
 }

@@ -112,6 +112,7 @@ class RouteTree implements GoRouter {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
     Object? extra,
+    String? fragment,
   }) {
     router.goNamed(
       name,
@@ -126,6 +127,7 @@ class RouteTree implements GoRouter {
     String name, {
     Map<String, String> pathParameters = const <String, String>{},
     Map<String, dynamic> queryParameters = const <String, dynamic>{},
+    String? fragment,
   }) {
     return router.namedLocation(
       name,
@@ -209,5 +211,5 @@ class RouteTree implements GoRouter {
   }
 
   @override
-  GoRouterState? get state => router.state;
+  GoRouterState get state => router.state;
 }
